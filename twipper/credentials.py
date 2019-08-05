@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
+__version__ = '0.0.1'
+
 import json
 
 import oauth2
@@ -109,10 +115,10 @@ class TwipperCredentials(object):
         if response.status_code != 200:
             return None
 
-        json = response.json()
+        parsed = response.json()
 
-        if 'access_token' in json:
-            oauth_token = json['access_token']
+        if 'access_token' in parsed:
+            oauth_token = parsed['access_token']
 
             return oauth_token
         else:
