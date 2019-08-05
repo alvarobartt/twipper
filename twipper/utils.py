@@ -15,25 +15,25 @@ def available_languages(api):
     https://developer.twitter.com/en/docs/developer-utilities/supported-languages/api-reference/get-help-languages.html
 
     Returns:
-        languages (:obj:`list`): description
-            returns a `list` containing all the available languages in which tweets are written,
+        :obj:`list` - languages:
+            Returns a :obj:`list` containing all the available languages in which tweets are written,
             in order to check if the introduced language is a valid one or not.
 
     Raises:
         ConnectionError: raised when connection to api.twitter could not be established.
-        json.JSONDecodeError: raised when response object could not be parsed.
+        RuntimeError: raised when response object could not be parsed.
         IndexError: raised if the retrieved languages `list` is empty.
     """
 
     url = 'https://api.twitter.com/1.1/help/languages.json'
     response, content = api.request(url, method='GET')
     if response.status != 200:
-        raise ConnectionError('ERR#001: connection to api.twitter could not be established.')
+        raise ConnectionError('connection to `api.twitter` could not be established.')
 
     try:
         data = json.loads(content.decode('utf-8'))
     except json.JSONDecodeError:
-        raise json.JSONDecodeError('ERR#006: retrieved content could not be parsed.')
+        raise RuntimeError('retrieved content could not be parsed.')
 
     languages = list()
 
@@ -46,4 +46,4 @@ def available_languages(api):
     if len(languages) > 0:
         return languages
     else:
-        raise IndexError('ERR#007: api.twitter languages could not be retrieved.')
+        raise IndexError('`api.twitter` languages could not be retrieved.')

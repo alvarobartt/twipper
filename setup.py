@@ -11,11 +11,11 @@ def readme():
 
 setup(
     name='twipper',
-    version='0.0.1',
+    version='0.0.2',
     packages=find_packages(),
     url='https://github.com/alvarob96/twipper',
-    download_url='https://github.com/alvarob96/twipper/archive/0.0.1.tar.gz',
-    license='MIT License',
+    download_url='https://github.com/alvarob96/twipper/archive/0.0.2.tar.gz',
+    license='GNU General Public License v3 (GPLv3)',
     author='Alvaro Bartolome',
     author_email='alvarob96@usal.es',
     description='twipper - is a Python package that works as a Twitter API Wrapper',
@@ -30,10 +30,10 @@ setup(
     classifiers=[
         "Development Status :: 1 - Planning",
         "Programming Language :: Python :: 3 :: Only",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Intended Audience :: Developers",
         "Topic :: Scientific/Engineering :: Information Analysis",
-        "Topic :: Software Development :: Libraries"
+        "Topic :: Software Development :: Libraries",
     ],
     keywords='twitter, wrapper, api'
 )

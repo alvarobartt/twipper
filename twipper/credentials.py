@@ -45,11 +45,11 @@ class TwipperCredentials(object):
         send both GET and POST requests to https://api.twitter.com/1.1/
 
         Returns:
-            api (:obj:`oauth2.Client`): description
-                the oauth2 validated client to send both GET and POST requests to the Twitter API.
+            :obj:`oauth2.Client` - api:
+                Returns the oauth2 validated client to send both GET and POST requests to the Twitter API.
 
         Raises:
-            ValueError: raised if consumer, token or client are not valid.
+            ValueError: raised if the consumer, token or client are not valid.
         """
 
         try:
@@ -80,8 +80,8 @@ class TwipperCredentials(object):
         generate the `auth` object that will be sent inside a request header.
 
         Returns:
-            auth (:obj:`requests_oauthlib.OAuth1`): description
-                the oauth1 object containing the credentials to access Twitter API endpoints for Streaming.
+            :obj:`requests_oauthlib.OAuth1` - auth:
+                Returns the oauth1 object containing the credentials to access Twitter API endpoints for Streaming.
         """
 
         auth = OAuth1(self.consumer_key, self.consumer_secret,
@@ -97,7 +97,8 @@ class TwipperCredentials(object):
         API Reference: https://developer.twitter.com/en/docs/basics/authentication/api-reference/token
 
         Returns:
-            access_token (:obj:`str`): the Bearer token provided by Twitter OAuth2 for API Premium access.
+            :obj:`str` - access_token:
+                Returns the Bearer token provided by Twitter OAuth2 for API Premium access.
         """
 
         base_url = 'https://api.twitter.com/oauth2/token'
@@ -132,7 +133,9 @@ class TwipperCredentials(object):
         API Reference: https://developer.twitter.com/en/docs/basics/authentication/api-reference/invalidate_bearer_token
 
         Returns:
-            state (:obj:`boolean`): `True` if the access_token was properly revoked and `False` if any error was found.
+            :obj:`boolean` - state:
+                Returns a :obj:`boolean` which is either `True` if the access_token was properly revoked or
+                `False` if the function errored at any point.
         """
 
         base_url = 'https://api.twitter.com/oauth2/invalidate_token'

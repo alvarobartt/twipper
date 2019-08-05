@@ -150,8 +150,8 @@ def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, la
         language (:obj:`str`, optional): is the language on which the tweet has been written. Default value is `None`.
 
     Returns:
-        tweets (:obj:`list`): description
-            returns a `list` containing all the retrieved tweets from Twitter, which means all the available tweets from
+        :obj:`list` - tweets:
+            Returns a `list` containing all the retrieved tweets from Twitter, which means all the available tweets from
             the user specified on the arguments of the function.
 
     Raises:
