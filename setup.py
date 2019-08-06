@@ -11,10 +11,10 @@ def readme():
 
 setup(
     name='twipper',
-    version='0.0.4',
+    version='0.0.5',
     packages=find_packages(),
     url='https://github.com/alvarob96/twipper',
-    download_url='https://github.com/alvarob96/twipper/archive/0.0.4.tar.gz',
+    download_url='https://github.com/alvarob96/twipper/archive/0.0.5.tar.gz',
     license='GNU General Public License v3 (GPLv3)',
     author='Alvaro Bartolome',
     author_email='alvarob96@usal.es',

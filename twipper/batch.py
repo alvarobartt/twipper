@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 import json
 import oauth2
@@ -116,7 +116,7 @@ def search_tweets(api, query, page_count=5, filter_retweets=False, language=None
         try:
             data = json.loads(content.decode('utf-8'))
         except json.decoder.JSONDecodeError:
-            raise RuntimeError('ERR#006: retrieved content could not be parsed.')
+            break
 
         if 'statuses' in data:
             if len(data['statuses']) > 0:
@@ -233,7 +233,7 @@ def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, la
         try:
             data = json.loads(content.decode('utf-8'))
         except json.decoder.JSONDecodeError:
-            raise RuntimeError('ERR#006: retrieved content could not be parsed.')
+            break
 
         if 'statuses' in data:
             if len(data['statuses']) > 0:

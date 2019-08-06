@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 import datetime
 import json
@@ -103,7 +103,10 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
             if tweet_limit == tweet_counter:
                 break
 
-            tweet = json.loads(line.decode('utf-8'))
+            try:
+                tweet = json.loads(line.decode('utf-8'))
+            except json.decoder.JSONDecodeError:
+                continue
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
@@ -120,7 +123,10 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
             if current_date >= date_limit:
                 break
 
-            tweet = json.loads(line.decode('utf-8'))
+            try:
+                tweet = json.loads(line.decode('utf-8'))
+            except json.decoder.JSONDecodeError:
+                continue
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
@@ -136,7 +142,10 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
             if tweet_limit == tweet_counter:
                 break
 
-            tweet = json.loads(line.decode('utf-8'))
+            try:
+                tweet = json.loads(line.decode('utf-8'))
+            except json.decoder.JSONDecodeError:
+                continue
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
@@ -247,7 +256,10 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
             if tweet_limit == tweet_counter:
                 break
 
-            tweet = json.loads(line.decode('utf-8'))
+            try:
+                tweet = json.loads(line.decode('utf-8'))
+            except json.decoder.JSONDecodeError:
+                continue
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
@@ -264,7 +276,10 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
             if current_date >= date_limit:
                 break
 
-            tweet = json.loads(line.decode('utf-8'))
+            try:
+                tweet = json.loads(line.decode('utf-8'))
+            except json.decoder.JSONDecodeError:
+                continue
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
@@ -280,7 +295,10 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
             if tweet_limit == tweet_counter:
                 break
 
-            tweet = json.loads(line.decode('utf-8'))
+            try:
+                tweet = json.loads(line.decode('utf-8'))
+            except json.decoder.JSONDecodeError:
+                continue
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
