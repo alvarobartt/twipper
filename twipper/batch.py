@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 import json
 import oauth2
@@ -205,7 +205,7 @@ def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, la
     response, content = api.request(url, method='GET')
 
     if response.status != 200:
-        raise ConnectionError('connection errored with code ' + str(response.status) + '.')
+        raise ConnectionError('connection errored with code ' + str(response.status))
 
     tweets = list()
 

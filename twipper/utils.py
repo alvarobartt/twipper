@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 import json
+import requests
 
 
 def available_languages(api):
@@ -47,3 +48,42 @@ def available_languages(api):
         return languages
     else:
         raise IndexError('`api.twitter` languages could not be retrieved.')
+
+
+def country_to_bounding_box(country):
+    """
+    This function retrieves the bounding box coordinates of the specified country, as in order to retrieve tweets
+    from an specific country or region from Twitter Streaming API the bounding box coordinates are needed. So on, the
+    source where the bounding boxes are retrieved is https://nominatim.openstreetmap.org/, via HTTP GET request.
+
+    Returns:
+        :obj:`str` - bounding_box:
+            Returns a :obj:`str` containing all the bounding box coordinates for a specified country,
+            in order to sent it as a param to the POST request for the Streaming API
+
+    Raises:
+        ConnectionError: raised when connection to http://nominatim.openstreetmap.org/ could not be established.
+        ValueError: raised when arguments are not valid or json errored while loading.
+        IndexError: raised if access to json object bounding box errored.
+    """
+
+    url = 'http://nominatim.openstreetmap.org/search?q=' + country + '&format=json'
+
+    req = requests.get(url)
+
+    if req.status_code != 200:
+        raise ConnectionError('connection errored with code ' + str(req.status_code))
+
+    try:
+        result = json.loads(req.text)
+    except ValueError:
+        raise ValueError('error loading json from request')
+
+    try:
+        result = result[0]["boundingbox"]
+    except IndexError:
+        return IndexError('error accessing json object')
+
+    bounding_box = ','.join(result)
+
+    return bounding_box
