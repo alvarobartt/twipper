@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 import datetime
 import json
@@ -222,7 +222,7 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
 
     params = {
         'language': language,
-        'locations': bounding_box
+        'locations': str(bounding_box)
     }
 
     headers = {
@@ -236,7 +236,7 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
                              stream=True)
 
     if response.status_code != 200:
-        raise ConnectionError('connection errored with code ' + str(response.status_code) + '.')
+        raise ConnectionError('connection errored with code ' + str(response.status_code))
 
     tweets = list()
 

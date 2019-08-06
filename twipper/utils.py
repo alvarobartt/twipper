@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 import json
 import requests
@@ -83,6 +83,10 @@ def country_to_bounding_box(country):
         result = result[0]["boundingbox"]
     except IndexError:
         return IndexError('error accessing json object')
+
+    coordinates = [2, 0, 3, 1]  # western, south, east, north
+
+    result = [result[i] for i in coordinates]
 
     bounding_box = ','.join(result)
 
