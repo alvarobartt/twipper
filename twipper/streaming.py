@@ -13,7 +13,8 @@ import requests_oauthlib
 from twipper.utils import country_to_bounding_box
 
 
-def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit=None, date_limit=None):
+def stream_tweets(auth, query, language=None, filter_retweets=False,
+                  tweet_limit=None, date_limit=None, retry=5):
     """
     This function retrieves streaming tweets matching the given query, so on, this function will open a stream to
     the Twitter Streaming API to retrieve real-time tweets. By the time these tweets are retrieved, they are handled
@@ -31,6 +32,10 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
             specifies the amount of tweets to be retrieved on streaming, default is 10k tweets.
         date_limit (:obj:`str`, optional):
             specifies the date (format `yyyymmddhhmm`) where the stream will stop, default is `None`
+        retry (:obj:`int` or :obj:`str`, optional):
+            value to set the number of retries if connection to api.twitter fails, it can either be an :obj:`int` or
+            a :obj:`str` which can just be the value `no_limit` in the case that no retry limits want to be set. Default
+            value is 5 retries whenever connection fails, until function finishes.
 
     Returns:
         :obj:`list` - tweets:
@@ -74,6 +79,15 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
         except ValueError:
             raise ValueError("incorrect date format, it should be 'yyyymmddhhmm'.")
 
+    if not isinstance(retry, int) and not isinstance(retry, str):
+        raise ValueError('retry value is not valid as it is not a str or int value!')
+
+    if isinstance(retry, str) and retry != 'no_limit':
+        raise ValueError('retry value is not valid as it is not `no_limit`!')
+
+    if isinstance(retry, int) and retry < 0:
+        raise ValueError('retry value is not valid as it is below 0!')
+
     url = 'https://stream.twitter.com/1.1/statuses/filter.json'
 
     params = {
@@ -96,6 +110,11 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
 
     tweets = list()
 
+    if isinstance(retry, str) and retry == 'no_limit':
+        retries = -1
+    else:
+        retries = retry
+
     if tweet_limit is not None:
         tweet_counter = 0
 
@@ -103,9 +122,13 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
             if tweet_limit == tweet_counter:
                 break
 
+            if retries == 0:
+                break
+
             try:
                 tweet = json.loads(line.decode('utf-8'))
             except json.decoder.JSONDecodeError:
+                retries -= 1
                 continue
 
             if filter_retweets:
@@ -123,9 +146,13 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
             if current_date >= date_limit:
                 break
 
+            if retries == 0:
+                break
+
             try:
                 tweet = json.loads(line.decode('utf-8'))
             except json.decoder.JSONDecodeError:
+                retries -= 1
                 continue
 
             if filter_retweets:
@@ -142,9 +169,13 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
             if tweet_limit == tweet_counter:
                 break
 
+            if retries == 0:
+                break
+
             try:
                 tweet = json.loads(line.decode('utf-8'))
             except json.decoder.JSONDecodeError:
+                retries -= 1
                 continue
 
             if filter_retweets:
@@ -161,7 +192,8 @@ def stream_tweets(auth, query, language=None, filter_retweets=False, tweet_limit
         raise IndexError('no tweets could be retrieved.')
 
 
-def stream_generic_tweets(auth, country, language=None, filter_retweets=False, tweet_limit=None, date_limit=None):
+def stream_generic_tweets(auth, country, language=None, filter_retweets=False,
+                          tweet_limit=None, date_limit=None, retry=5):
     """
     This function retrieves streaming tweets matching the given query, so on, this function will open a stream to
     the Twitter Streaming API to retrieve real-time tweets. By the time these tweets are retrieved, they are handled
@@ -179,6 +211,10 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
             specifies the amount of tweets to be retrieved on streaming, default is 10k tweets.
         date_limit (:obj:`str`, optional):
             specifies the date (format `yyyymmddhhmm`) where the stream will stop, default is `None`
+        retry (:obj:`int` or :obj:`str`, optional):
+            value to set the number of retries if connection to api.twitter fails, it can either be an :obj:`int` or
+            a :obj:`str` which can just be the value `no_limit` in the case that no retry limits want to be set. Default
+            value is 5 retries whenever connection fails, until function finishes.
 
     Returns:
         :obj:`list` - tweets:
@@ -201,17 +237,11 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
     if country is None:
         raise ValueError('query is mandatory')
 
-    if not isinstance(language, str):
+    if not isinstance(language, str) or language is None:
         raise ValueError('language must be a string!')
 
-    if language is None:
-        raise ValueError('language is mandatory')
-
-    if not isinstance(filter_retweets, bool):
+    if not isinstance(filter_retweets, bool) or filter_retweets is None:
         raise ValueError('filter_retweets must be a boolean!')
-
-    if filter_retweets is None:
-        raise ValueError('filter_retweets is mandatory')
 
     if tweet_limit is not None and not isinstance(tweet_limit, int):
         raise ValueError('tweet_limit value is not valid')
@@ -221,6 +251,15 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
             datetime.datetime.strptime(date_limit, '%Y%m%d%H%M')
         except ValueError:
             raise ValueError("incorrect date format, it should be 'yyyymmddhhmm'.")
+
+    if not isinstance(retry, int) and not isinstance(retry, str):
+        raise ValueError('retry value is not valid as it is not a str or int value!')
+
+    if isinstance(retry, str) and retry != 'no_limit':
+        raise ValueError('retry value is not valid as it is not `no_limit`!')
+
+    if isinstance(retry, int) and retry < 0:
+        raise ValueError('retry value is not valid as it is below 0!')
 
     try:
         bounding_box = country_to_bounding_box(country)
@@ -249,6 +288,11 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
 
     tweets = list()
 
+    if isinstance(retry, str) and retry == 'no_limit':
+        retries = -1
+    else:
+        retries = retry
+
     if tweet_limit is not None:
         tweet_counter = 0
 
@@ -256,9 +300,13 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
             if tweet_limit == tweet_counter:
                 break
 
+            if retries == 0:
+                break
+
             try:
                 tweet = json.loads(line.decode('utf-8'))
             except json.decoder.JSONDecodeError:
+                retries -= 1
                 continue
 
             if filter_retweets:
@@ -276,9 +324,13 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
             if current_date >= date_limit:
                 break
 
+            if retries == 0:
+                break
+
             try:
                 tweet = json.loads(line.decode('utf-8'))
             except json.decoder.JSONDecodeError:
+                retries -= 1
                 continue
 
             if filter_retweets:
@@ -295,9 +347,13 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False, t
             if tweet_limit == tweet_counter:
                 break
 
+            if retries == 0:
+                break
+
             try:
                 tweet = json.loads(line.decode('utf-8'))
             except json.decoder.JSONDecodeError:
+                retries -= 1
                 continue
 
             if filter_retweets:
