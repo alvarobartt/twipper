@@ -11,10 +11,10 @@ def readme():
 
 setup(
     name='twipper',
-    version='0.0.5',
+    version='0.0.6',
     packages=find_packages(),
     url='https://github.com/alvarob96/twipper',
-    download_url='https://github.com/alvarob96/twipper/archive/0.0.5.tar.gz',
+    download_url='https://github.com/alvarob96/twipper/archive/0.0.6.tar.gz',
     license='GNU General Public License v3 (GPLv3)',
     author='Alvaro Bartolome',
     author_email='alvarob96@usal.es',
@@ -28,7 +28,7 @@ setup(
     data_files=[],
     include_package_data=True,
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 2 - Pre-Alpha",
         "Programming Language :: Python :: 3 :: Only",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Intended Audience :: Developers",

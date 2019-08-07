@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.5'
+__version__ = '0.0.6'
 
 import json
 
@@ -35,7 +35,7 @@ class TwipperCredentials(object):
         self.access_token = access_token
         self.access_token_secret = access_token_secret
 
-        self.oauth_token = self.get_oauth_token()
+        self.oauth_token = self.__get_oauth_token()
 
     def get_api(self):
         """
@@ -89,7 +89,7 @@ class TwipperCredentials(object):
 
         return auth
 
-    def get_oauth_token(self):
+    def __get_oauth_token(self):
         """
         This function provides the Bearer token which will grant us the access to the Twitter Premium API in order
         to send both GET and POST requests. The Bearer token is generated via Twitter API which implements an OAuth2

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.5'
+__version__ = '0.0.6'
 
 import datetime
 import json
@@ -108,8 +108,6 @@ def stream_tweets(auth, query, language=None, filter_retweets=False,
     if response.status_code != 200:
         raise ConnectionError('connection errored with code ' + str(response.status_code) + '.')
 
-    tweets = list()
-
     if isinstance(retry, str) and retry == 'no_limit':
         retries = -1
     else:
@@ -133,10 +131,10 @@ def stream_tweets(auth, query, language=None, filter_retweets=False,
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
-                    tweets.append(tweet)
+                    yield tweet
                     tweet_counter += 1
             else:
-                tweets.append(tweet)
+                yield tweet
                 tweet_counter += 1
 
     elif date_limit is not None:
@@ -157,9 +155,9 @@ def stream_tweets(auth, query, language=None, filter_retweets=False,
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
-                    tweets.append(tweet)
+                    yield tweet
             else:
-                tweets.append(tweet)
+                yield tweet
 
     else:
         tweet_limit = 1000
@@ -180,19 +178,14 @@ def stream_tweets(auth, query, language=None, filter_retweets=False,
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
-                    tweets.append(tweet)
+                    yield tweet
                     tweet_counter += 1
             else:
-                tweets.append(tweet)
+                yield tweet
                 tweet_counter += 1
 
-    if len(tweets) > 0:
-        return tweets
-    else:
-        raise IndexError('no tweets could be retrieved.')
 
-
-def stream_generic_tweets(auth, country, language=None, filter_retweets=False,
+def stream_country_tweets(auth, country, language=None, filter_retweets=False,
                           tweet_limit=None, date_limit=None, retry=5):
     """
     This function retrieves streaming tweets matching the given query, so on, this function will open a stream to
@@ -286,8 +279,6 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False,
     if response.status_code != 200:
         raise ConnectionError('connection errored with code ' + str(response.status_code))
 
-    tweets = list()
-
     if isinstance(retry, str) and retry == 'no_limit':
         retries = -1
     else:
@@ -311,10 +302,10 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False,
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
-                    tweets.append(tweet)
+                    yield tweet
                     tweet_counter += 1
             else:
-                tweets.append(tweet)
+                yield tweet
                 tweet_counter += 1
 
     elif date_limit is not None:
@@ -335,9 +326,9 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False,
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
-                    tweets.append(tweet)
+                    yield tweet
             else:
-                tweets.append(tweet)
+                yield tweet
 
     else:
         tweet_limit = 1000
@@ -358,13 +349,8 @@ def stream_generic_tweets(auth, country, language=None, filter_retweets=False,
 
             if filter_retweets:
                 if 'retweeted_status' not in tweet:
-                    tweets.append(tweet)
+                    yield tweet
                     tweet_counter += 1
             else:
-                tweets.append(tweet)
+                yield tweet
                 tweet_counter += 1
-
-    if len(tweets) > 0:
-        return tweets
-    else:
-        raise IndexError('no tweets could be retrieved.')
