@@ -1,19 +1,20 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.6'
+# Copyright 2018-2019 Alvaro Bartolome
+# See LICENSE for details.
 
 import datetime
 import json
 
+import oauth2
 import requests
 import requests_oauthlib
 
-from twipper.utils import country_to_bounding_box
+from twipper.utils import available_languages, country_to_bounding_box
 
 
-def stream_tweets(auth, query, language=None, filter_retweets=False,
+def stream_tweets(api, auth, query, language=None, filter_retweets=False,
                   tweet_limit=None, date_limit=None, retry=5):
     """
     This function retrieves streaming tweets matching the given query, so on, this function will open a stream to
@@ -22,8 +23,9 @@ def stream_tweets(auth, query, language=None, filter_retweets=False,
     API Reference: https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters.html
 
     Args:
+        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
         auth (:obj:`requests_oauthlib.OAuth1`):
-            valid Twitter Auth object generated via `twipper.credentials.TwipperCredentials`.
+            valid Twitter Auth object generated via `twipper.credentials.Twipper`.
         query (:obj:`str`): contains the query with the words to search along the Twitter Streaming.
         language (:obj:`str`, optional): is the language on which the tweet has been written, default is `None`.
         filter_retweets (:obj:`boolean`, optional):
@@ -39,12 +41,15 @@ def stream_tweets(auth, query, language=None, filter_retweets=False,
 
     Returns:
         :obj:`list` - tweets:
-            Returns a :obj:`list` containing all the retrieved tweets from Twitter, which means all the available tweets
+            Yields a :obj:`list` containing all the retrieved tweets from Twitter, which means all the available tweets
             from the user specified on the arguments of the function.
 
     Raises:
         ValueError: raised if the introduced arguments do not match or errored.
     """
+
+    if not api or not isinstance(api, oauth2.Client):
+        raise ValueError('specified api is not valid!')
 
     if not isinstance(auth, requests_oauthlib.OAuth1):
         raise ValueError('specified auth is not valid!')
@@ -90,20 +95,29 @@ def stream_tweets(auth, query, language=None, filter_retweets=False,
 
     url = 'https://stream.twitter.com/1.1/statuses/filter.json'
 
-    params = {
-        'track': query,
-        'language': language,
-    }
+    if language:
+        try:
+            languages = available_languages(api)
+        except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
+            raise RuntimeError('`available_languages` function failed')
+
+        if language in languages:
+            params = {
+                'track': query,
+                'language': language
+            }
+        else:
+            raise ValueError('the introduced language does not exist.')
+    else:
+        params = {
+            'track': query
+        }
 
     headers = {
         'Content-Type': 'application/json',
     }
 
-    response = requests.post(url,
-                             auth=auth,
-                             headers=headers,
-                             params=params,
-                             stream=True)
+    response = requests.post(url, auth=auth, headers=headers, params=params, stream=True)
 
     if response.status_code != 200:
         raise ConnectionError('connection errored with code ' + str(response.status_code) + '.')
@@ -113,7 +127,7 @@ def stream_tweets(auth, query, language=None, filter_retweets=False,
     else:
         retries = retry
 
-    if tweet_limit is not None:
+    if tweet_limit:
         tweet_counter = 0
 
         for line in response.iter_lines():
@@ -185,7 +199,7 @@ def stream_tweets(auth, query, language=None, filter_retweets=False,
                 tweet_counter += 1
 
 
-def stream_country_tweets(auth, country, language=None, filter_retweets=False,
+def stream_country_tweets(api, auth, country, language=None, filter_retweets=False,
                           tweet_limit=None, date_limit=None, retry=5):
     """
     This function retrieves streaming tweets matching the given query, so on, this function will open a stream to
@@ -194,8 +208,9 @@ def stream_country_tweets(auth, country, language=None, filter_retweets=False,
     API Reference: https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters.html
 
     Args:
+        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
         auth (:obj:`requests_oauthlib.OAuth1`):
-            valid Twitter Auth object generated via `twipper.credentials.TwipperCredentials`.
+            valid Twitter Auth object generated via `twipper.credentials.Twipper`.
         country (:obj:`str`): contains the country name from where generic tweets will be retrieved.
         language (:obj:`str`, optional): is the language on which the tweet has been written, default is `None`.
         filter_retweets (:obj:`boolean`, optional):
@@ -211,12 +226,15 @@ def stream_country_tweets(auth, country, language=None, filter_retweets=False,
 
     Returns:
         :obj:`list` - tweets:
-            Returns a :obj:`list` containing all the retrieved tweets from Twitter, which means all the available tweets
+            Yields a :obj:`list` containing all the retrieved tweets from Twitter, which means all the available tweets
             from the user specified on the arguments of the function.
 
     Raises:
         ValueError: raised if the introduced arguments do not match or errored.
     """
+
+    if not api or not isinstance(api, oauth2.Client):
+        raise ValueError('specified api is not valid!')
 
     if not isinstance(auth, requests_oauthlib.OAuth1):
         raise ValueError('specified auth is not valid!')
@@ -261,20 +279,29 @@ def stream_country_tweets(auth, country, language=None, filter_retweets=False,
 
     url = 'https://stream.twitter.com/1.1/statuses/filter.json'
 
-    params = {
-        'language': language,
-        'locations': str(bounding_box)
-    }
+    if language:
+        try:
+            languages = available_languages(api)
+        except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
+            raise RuntimeError('`available_languages` function failed')
+
+        if language in languages:
+            params = {
+                'language': language,
+                'locations': str(bounding_box)
+            }
+        else:
+            raise ValueError('the introduced language does not exist.')
+    else:
+        params = {
+            'locations': str(bounding_box)
+        }
 
     headers = {
         'Content-Type': 'application/json',
     }
 
-    response = requests.post(url,
-                             auth=auth,
-                             headers=headers,
-                             params=params,
-                             stream=True)
+    response = requests.post(url, auth=auth, headers=headers, params=params, stream=True)
 
     if response.status_code != 200:
         raise ConnectionError('connection errored with code ' + str(response.status_code))
@@ -284,7 +311,7 @@ def stream_country_tweets(auth, country, language=None, filter_retweets=False,
     else:
         retries = retry
 
-    if tweet_limit is not None:
+    if tweet_limit:
         tweet_counter = 0
 
         for line in response.iter_lines():

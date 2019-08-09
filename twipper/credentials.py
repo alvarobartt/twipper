@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.6'
+# Copyright 2018-2019 Alvaro Bartolome
+# See LICENSE for details.
 
 import json
 
@@ -11,16 +11,16 @@ import requests
 from requests_oauthlib import OAuth1
 
 
-class TwipperCredentials(object):
+class Twipper(object):
     """
-    TwipperCredentials is a class that contains the constructor (`__init__`) of the Twitter API credentials in order to
+    Twipper is a class that contains the constructor (`__init__`) of the Twitter API credentials in order to
     get access to it via validating the credentials of the application previously created by the user on
     https://developer.twitter.com/.
     """
 
     def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret):
         """
-        This function is the constructor of :obj:`twipper.credentials.TwipperCredentials` class,
+        This function is the constructor of :obj:`twipper.credentials.Twipper` class,
         which will instantiate the class and initialize it with the respective arguments specified.
 
         Args:

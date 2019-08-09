@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.6'
+# Copyright 2018-2019 Alvaro Bartolome
+# See LICENSE for details.
 
 import json
 import requests

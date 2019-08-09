@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.6'
+# Copyright 2018-2019 Alvaro Bartolome
+# See LICENSE for details.
 
 import json
 import oauth2
@@ -10,7 +10,7 @@ import oauth2
 from twipper.utils import available_languages
 
 
-def search_tweets(api, query, page_count=5, filter_retweets=False, language=None):
+def search_tweets(api, query, page_count=1, filter_retweets=False, language=None):
     """
     This function retrieves historical tweets on batch processing. These tweets contain the specified words on the
     query, which can use operators such as AND or OR, as specified on
@@ -20,7 +20,7 @@ def search_tweets(api, query, page_count=5, filter_retweets=False, language=None
     API Reference: https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html
 
     Args:
-        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.TwipperCredentials`.
+        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
         query (:obj:`str`): contains the query with the words to search along Twitter historic data.
         page_count (:obj:`int`, optional):
             specifies the amount of pages (100 tweets per page) to retrieve data from. Default value is 5.
@@ -83,7 +83,7 @@ def search_tweets(api, query, page_count=5, filter_retweets=False, language=None
         else:
             raise ValueError('the introduced language does not exist.')
 
-    url += '&count=100'
+    url += '&count=100result_type=mixed'
 
     response, content = api.request(url, method='GET')
 
@@ -99,16 +99,24 @@ def search_tweets(api, query, page_count=5, filter_retweets=False, language=None
 
     if 'statuses' in data:
         if len(data['statuses']) > 0:
-            max_id = data['statuses'][-1]['id']
-            tweets.append(data['statuses'])
-        else:
-            return tweets
-    else:
-        return tweets
+            tweets += data['statuses']
 
-    pages = page_count
-    for _ in range(pages):
-        response, content = api.request(url + '&since_id=' + str(max_id), method='GET')
+            if 'search_metadata' in data:
+                if 'next_results' in data['search_metadata']:
+                    next_url = data['search_metadata']['next_results']
+                else:
+                    return tweets
+            else:
+                return tweets
+        else:
+            raise IndexError('no tweets could be retrieved.')
+    else:
+        raise IndexError('no tweets could be retrieved.')
+
+    base_url = 'https://api.twitter.com/1.1/search/tweets.json'
+
+    for _ in range(page_count):
+        response, content = api.request(base_url + next_url, method='GET')
 
         if response.status != 200:
             break
@@ -120,8 +128,15 @@ def search_tweets(api, query, page_count=5, filter_retweets=False, language=None
 
         if 'statuses' in data:
             if len(data['statuses']) > 0:
-                max_id = data['statuses'][-1]['id']
-                tweets.append(data['statuses'])
+                tweets += data['statuses']
+
+                if 'search_metadata' in data:
+                    if 'next_results' in data['search_metadata']:
+                        next_url = data['search_metadata']['next_results']
+                    else:
+                        break
+                else:
+                    break
             else:
                 break
         else:
@@ -141,7 +156,7 @@ def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, la
     API Reference: https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html
 
     Args:
-        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.TwipperCredentials`.
+        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
         screen_name (:obj:`str`): contains the username of the user from which tweets are going to be retrieved.
         page_count (:obj:`int`, optional):
             specifies the amount of pages (100 tweets per page) to retrieve data from. Default value is 5.
@@ -216,16 +231,24 @@ def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, la
 
     if 'statuses' in data:
         if len(data['statuses']) > 0:
-            max_id = data['statuses'][-1]['id']
-            tweets.append(data['statuses'])
-        else:
-            return tweets
-    else:
-        return tweets
+            tweets += data['statuses']
 
-    pages = page_count
-    for _ in range(pages):
-        response, content = api.request(url + '&since_id=' + str(max_id), method='GET')
+            if 'search_metadata' in data:
+                if 'next_results' in data['search_metadata']:
+                    next_url = data['search_metadata']['next_results']
+                else:
+                    return tweets
+            else:
+                return tweets
+        else:
+            raise IndexError('no tweets could be retrieved.')
+    else:
+        raise IndexError('no tweets could be retrieved.')
+
+    base_url = 'https://api.twitter.com/1.1/search/tweets.json'
+
+    for _ in range(page_count):
+        response, content = api.request(base_url + next_url, method='GET')
 
         if response.status != 200:
             break
@@ -237,8 +260,15 @@ def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, la
 
         if 'statuses' in data:
             if len(data['statuses']) > 0:
-                max_id = data['statuses'][-1]['id']
-                tweets.append(data['statuses'])
+                tweets += data['statuses']
+
+                if 'search_metadata' in data:
+                    if 'next_results' in data['search_metadata']:
+                        next_url = data['search_metadata']['next_results']
+                    else:
+                        break
+                else:
+                    break
             else:
                 break
         else:
