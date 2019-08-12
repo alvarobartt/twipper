@@ -5,4 +5,4 @@
 # See LICENSE for details.
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.0.8'
+__version__ = '0.0.9'

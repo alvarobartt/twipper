@@ -8,12 +8,15 @@ import json
 import requests
 
 
-def available_languages(api):
+def available_languages(access):
     """
     This function retrieves all the languages in which the language of a tweet can be detected,
     as they are the languages that Twitter works with. This function allows the system to check if
     the introduced language to a function is a valid one or not. API Reference:
     https://developer.twitter.com/en/docs/developer-utilities/supported-languages/api-reference/get-help-languages.html
+
+    Args:
+        access (:obj:`twipper.credentials.Twipper`): object containing all the credentials needed to access api.twitter
 
     Returns:
         :obj:`list` - languages:
@@ -26,8 +29,12 @@ def available_languages(api):
         IndexError: raised if the retrieved languages `list` is empty.
     """
 
+    api = access.api
+
     url = 'https://api.twitter.com/1.1/help/languages.json'
+
     response, content = api.request(url, method='GET')
+
     if response.status != 200:
         raise ConnectionError('connection to `api.twitter` could not be established.')
 
@@ -55,6 +62,9 @@ def country_to_bounding_box(country):
     This function retrieves the bounding box coordinates of the specified country, as in order to retrieve tweets
     from an specific country or region from Twitter Streaming API the bounding box coordinates are needed. So on, the
     source where the bounding boxes are retrieved is https://nominatim.openstreetmap.org/, via HTTP GET request.
+
+    Args:
+        country (:obj:`str`): name of the country or region to get the bounding box coordinates from
 
     Returns:
         :obj:`str` - bounding_box:

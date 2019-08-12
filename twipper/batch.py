@@ -6,11 +6,12 @@
 
 import json
 import oauth2
+from twipper.credentials import Twipper
 
 from twipper.utils import available_languages
 
 
-def search_tweets(api, query, page_count=1, filter_retweets=False,
+def search_tweets(access, query, page_count=1, filter_retweets=False,
                   language=None, result_type='mixed', count=100):
     """
     This function retrieves historical tweets on batch processing. These tweets contain the specified words on the
@@ -21,7 +22,7 @@ def search_tweets(api, query, page_count=1, filter_retweets=False,
     API Reference: https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html
 
     Args:
-        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
+        access (:obj:`twipper.credentials.Twipper`): object containing all the credentials needed to access api.twitter
         query (:obj:`str`): contains the query with the words to search along Twitter historic data.
         page_count (:obj:`int`, optional):
             specifies the amount of pages (100 tweets per page) to retrieve data from, default value is 5.
@@ -41,11 +42,13 @@ def search_tweets(api, query, page_count=1, filter_retweets=False,
         ValueError: raised if the introduced arguments do not match or errored.
     """
 
-    if not isinstance(api, oauth2.Client):
-        raise ValueError('specified api is not valid!')
+    if not access or not isinstance(access, Twipper):
+        raise ValueError('access object to api.twitter is not valid!')
 
-    if api is None:
-        raise ValueError('api is mandatory')
+    api = access.api
+
+    if not isinstance(api, oauth2.Client):
+        raise ValueError('api is not valid!')
 
     if not isinstance(query, str):
         raise ValueError('query must be a string!')
@@ -160,7 +163,7 @@ def search_tweets(api, query, page_count=1, filter_retweets=False,
         raise IndexError('no tweets could be retrieved.')
 
 
-def search_user_tweets(api, screen_name, page_count=1, filter_retweets=False,
+def search_user_tweets(access, screen_name, page_count=1, filter_retweets=False,
                        language=None, result_type='mixed', count=100):
     """
     This function retrieves historical tweets from a Twitter user by their screen_name (@), whenever they grant the
@@ -169,7 +172,7 @@ def search_user_tweets(api, screen_name, page_count=1, filter_retweets=False,
     API Reference: https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets.html
 
     Args:
-        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
+        access (:obj:`twipper.credentials.Twipper`): object containing all the credentials needed to access api.twitter
         screen_name (:obj:`str`): contains the username of the user from which tweets are going to be retrieved.
         page_count (:obj:`int`, optional):
             specifies the amount of pages (100 tweets per page) to retrieve data from, default value is 5.
@@ -189,11 +192,13 @@ def search_user_tweets(api, screen_name, page_count=1, filter_retweets=False,
         ValueError: raised if the introduced arguments do not match or errored.
     """
 
-    if not isinstance(api, oauth2.Client):
-        raise ValueError('specified api is not valid!')
+    if not access or not isinstance(access, Twipper):
+        raise ValueError('access object to api.twitter is not valid!')
 
-    if api is None:
-        raise ValueError('api is mandatory')
+    api = access.api
+
+    if not isinstance(api, oauth2.Client):
+        raise ValueError('api is not valid!')
 
     if not isinstance(screen_name, str):
         raise ValueError('screen_name must be a string!')

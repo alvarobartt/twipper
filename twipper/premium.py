@@ -8,12 +8,12 @@ import json
 
 import oauth2
 import requests
+from twipper.credentials import Twipper
 
 from twipper.utils import available_languages
 
 
-def search_tweets(api, oauth_token, plan, label, query, page_count,
-                  from_date, to_date, language=None):
+def search_tweets(access, query, page_count, from_date, to_date, language=None):
     """
     This function retrieves historical tweets on batch processing from Twitter's Full Archive or 30Day. These tweets
     contain the specified words on the query, which can use premium operators as specified on
@@ -23,10 +23,7 @@ def search_tweets(api, oauth_token, plan, label, query, page_count,
     it is filled with the retrieved tweets.
 
     Args:
-        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
-        oauth_token (:obj:`str`): valid access_token for the authentication of every Twitter Premium API request.
-        plan (:obj:`str`): paid plan of twitter premium api, it can either be `30day` or `fullarchive`.
-        label (:obj:`str`): label that has been set up for the development environment of the Twitter Premium API.
+        access (:obj:`twipper.credentials.Twipper`): object containing all the credentials needed to access api.twitter
         query (:obj:`str`): contains the query with the words to search along Twitter historic data.
         page_count (:obj:`int`): specifies the amount of pages (100 tweets per page) to retrieve data from.
         from_date (:obj:`str`): starting date of the time interval to retrieve tweets from (`yyyymmddhhmm` format)
@@ -42,14 +39,25 @@ def search_tweets(api, oauth_token, plan, label, query, page_count,
         ValueError: raised if the introduced arguments do not match or errored.
     """
 
-    if not api or not isinstance(api, oauth2.Client):
-        raise ValueError('specified api is not valid!')
+    if not access or not isinstance(access, Twipper):
+        raise ValueError('access object to api.twitter is not valid!')
 
-    if not oauth_token or not isinstance(oauth_token, str):
+    api = access.api
+
+    if not isinstance(api, oauth2.Client):
+        raise ValueError('api is not valid!')
+
+    oauth_token = access.oauth_token
+
+    if not isinstance(oauth_token, str):
         raise ValueError('oauth_token is not valid!')
+
+    plan = access.plan
 
     if not plan or not isinstance(plan, str):
         raise ValueError('plan must be a `str`!')
+
+    label = access.label
 
     if not label or not isinstance(label, str):
         raise ValueError('label must be a `str`!')
@@ -169,8 +177,7 @@ def search_tweets(api, oauth_token, plan, label, query, page_count,
             raise IndexError('no tweets could be retrieved.')
 
 
-def wrapper_premium_user_search(api, oauth_token, plan, label, screen_name,
-                                page_count, from_date, to_date, language=None):
+def wrapper_premium_user_search(access, screen_name, page_count, from_date, to_date, language=None):
     """
     This function retrieves historical tweets on batch processing from Twitter's Full Archive or 30Day from a specific
     user via its screen name (Twitter name). These tweets contain the specified words on the query, which can use
@@ -181,10 +188,7 @@ def wrapper_premium_user_search(api, oauth_token, plan, label, screen_name,
     it is filled with the retrieved tweets.
 
     Args:
-        api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
-        oauth_token (:obj:`str`): valid access_token for the authentication of every Twitter Premium API request.
-        plan (:obj:`str`): paid plan of twitter premium api, it can either be `30day` or `fullarchive`.
-        label (:obj:`str`): label that has been set up for the development environment of the Twitter Premium API.
+        access (:obj:`twipper.credentials.Twipper`): object containing all the credentials needed to access api.twitter
         screen_name (:obj:`str`):
             is the Twitter's public name of the account that tweets are going to be retrieved, note that the account
             must be public.
@@ -202,14 +206,25 @@ def wrapper_premium_user_search(api, oauth_token, plan, label, screen_name,
         ValueError: raised if the introduced arguments do not match or errored.
     """
 
-    if not api or not isinstance(api, oauth2.Client):
-        raise ValueError('specified api is not valid!')
+    if not access or not isinstance(access, Twipper):
+        raise ValueError('access object to api.twitter is not valid!')
 
-    if not oauth_token or not isinstance(oauth_token, str):
+    api = access.api
+
+    if not isinstance(api, oauth2.Client):
+        raise ValueError('api is not valid!')
+
+    oauth_token = access.oauth_token
+
+    if not isinstance(oauth_token, str):
         raise ValueError('oauth_token is not valid!')
+
+    plan = access.plan
 
     if not plan or not isinstance(plan, str):
         raise ValueError('plan must be a `str`!')
+
+    label = access.label
 
     if not label or not isinstance(label, str):
         raise ValueError('label must be a `str`!')

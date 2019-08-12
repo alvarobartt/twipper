@@ -35,9 +35,36 @@ class Twipper(object):
         self.access_token = access_token
         self.access_token_secret = access_token_secret
 
+        self.api = self.__get_api()
+        self.oauth = self.__get_oauth()
         self.oauth_token = self.__get_oauth_token()
 
-    def get_api(self):
+        self.plan = ''
+        self.label = ''
+
+    @property
+    def plan(self):
+        return self._plan
+
+    @plan.setter
+    def plan(self, premium_plan):
+        if isinstance(premium_plan, str):
+            self._plan = premium_plan
+        else:
+            raise Exception('invalid value for premium plan.')
+
+    @property
+    def label(self):
+        return self._label
+
+    @label.setter
+    def label(self, premium_label):
+        if isinstance(premium_label, str):
+            self._label = premium_label
+        else:
+            raise Exception('invalid value for dev environment label.')
+
+    def __get_api(self):
         """
         This function validates the credentials of the Twitter API, by validating the token with oauth2 as it is the
         default authentication method implemented by the Twitter API (even though oauth1 authentication can be used). So
@@ -74,20 +101,20 @@ class Twipper(object):
             print(e) # Invalid client
             return None
 
-    def get_oauth(self):
+    def __get_oauth(self):
         """
         This function gets the `requests_oauthlib.OAuth1` authentication object with the OAuth1 method in order to
         generate the `auth` object that will be sent inside a request header.
 
         Returns:
-            :obj:`requests_oauthlib.OAuth1` - auth:
+            :obj:`requests_oauthlib.OAuth1` - oauth:
                 Returns the oauth1 object containing the credentials to access Twitter API endpoints for Streaming.
         """
 
-        auth = OAuth1(self.consumer_key, self.consumer_secret,
-                      self.access_token, self.access_token_secret)
+        oauth = OAuth1(self.consumer_key, self.consumer_secret,
+                       self.access_token, self.access_token_secret)
 
-        return auth
+        return oauth
 
     def __get_oauth_token(self):
         """
@@ -125,7 +152,7 @@ class Twipper(object):
         else:
             return None
 
-    def invalidate_oauth_token(self):
+    def close(self):
         """
         This function invalidates the specified access_token as Twitter API generates one access_token per application,
         so whenever the current access_token is not needed anymore it should be invalidated in order to be able to
