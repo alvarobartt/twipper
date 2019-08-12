@@ -10,7 +10,8 @@ import oauth2
 from twipper.utils import available_languages
 
 
-def search_tweets(api, query, page_count=1, filter_retweets=False, language=None):
+def search_tweets(api, query, page_count=1, filter_retweets=False,
+                  language=None, result_type='mixed', count=100):
     """
     This function retrieves historical tweets on batch processing. These tweets contain the specified words on the
     query, which can use operators such as AND or OR, as specified on
@@ -23,10 +24,13 @@ def search_tweets(api, query, page_count=1, filter_retweets=False, language=None
         api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
         query (:obj:`str`): contains the query with the words to search along Twitter historic data.
         page_count (:obj:`int`, optional):
-            specifies the amount of pages (100 tweets per page) to retrieve data from. Default value is 5.
+            specifies the amount of pages (100 tweets per page) to retrieve data from, default value is 5.
         filter_retweets (:obj:`boolean`, optional):
-            can be either `True` or `False`, to filter out retweets or not, respectively. Default value is `False`.
-        language (:obj:`str`, optional): is the language on which the tweet has been written. Default value is `None`.
+            can be either `True` or `False`, to filter out retweets or not, respectively, default value is `False`.
+        language (:obj:`str`, optional): is the language on which the tweet has been written, default value is `None`.
+        result_type (:obj:`str`, optional):
+            value to indicate which type of tweets want to be retrieved, it can either be `mixed`, `popular` or `recent`
+        count (:obj:`int`, optional): number of tweets per requests to retrieve (default and max is 100).
 
     Returns:
         :obj:`list` - tweets:
@@ -50,22 +54,22 @@ def search_tweets(api, query, page_count=1, filter_retweets=False, language=None
         raise ValueError('query is mandatory')
 
     if not isinstance(page_count, int):
-        raise ValueError('page_count must be an integer!')
-
-    if page_count is None:
-        raise ValueError('page_count is mandatory')
+        raise ValueError('page_count must be an `int` higher than 1!')
 
     if not isinstance(language, str):
-        raise ValueError('language must be a string!')
-
-    if language is None:
-        raise ValueError('language is mandatory')
+        raise ValueError('language must be a `str`!')
 
     if not isinstance(filter_retweets, bool):
-        raise ValueError('filter_retweets must be a boolean!')
+        raise ValueError('filter_retweets must be a `boolean`!')
 
-    if filter_retweets is None:
-        raise ValueError('filter_retweets is mandatory')
+    if not isinstance(result_type, str):
+        raise ValueError('result_type must be a `str`')
+
+    if result_type not in ['mixed', 'popular', 'recent']:
+        raise ValueError('result_type can just be `mixed`, `popular` or `recent`')
+
+    if not isinstance(count, int):
+        raise ValueError('count must be an `int` between 1 and 100!')
 
     url = 'https://api.twitter.com/1.1/search/tweets.json?q=' + query
 
@@ -83,7 +87,15 @@ def search_tweets(api, query, page_count=1, filter_retweets=False, language=None
         else:
             raise ValueError('the introduced language does not exist.')
 
-    url += '&count=100result_type=mixed'
+    if isinstance(count, int) and 0 < count <= 100:
+        url += '&count=' + str(count)
+    else:
+        url += '&count=100'
+
+    if isinstance(result_type, str) and result_type in ['mixed', 'popular', 'recent']:
+        url += '&result_type=' + result_type
+    else:
+        url += '&result_type=mixed'
 
     response, content = api.request(url, method='GET')
 
@@ -148,7 +160,8 @@ def search_tweets(api, query, page_count=1, filter_retweets=False, language=None
         raise IndexError('no tweets could be retrieved.')
 
 
-def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, language=None):
+def search_user_tweets(api, screen_name, page_count=1, filter_retweets=False,
+                       language=None, result_type='mixed', count=100):
     """
     This function retrieves historical tweets from a Twitter user by their screen_name (@), whenever they grant the
     application access their tweets for commercial purposes on ReadOnly permission. Retrieved tweets are stored on a
@@ -159,10 +172,13 @@ def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, la
         api (:obj:`oauth2.Client`): valid Twitter API generated via `twipper.credentials.Twipper`.
         screen_name (:obj:`str`): contains the username of the user from which tweets are going to be retrieved.
         page_count (:obj:`int`, optional):
-            specifies the amount of pages (100 tweets per page) to retrieve data from. Default value is 5.
+            specifies the amount of pages (100 tweets per page) to retrieve data from, default value is 5.
         filter_retweets (:obj:`boolean`, optional):
-            can be either `True` or `False`, to filter out retweets or not, respectively. Default value is `False`.
-        language (:obj:`str`, optional): is the language on which the tweet has been written. Default value is `None`.
+            can be either `True` or `False`, to filter out retweets or not, respectively, default value is `False`.
+        language (:obj:`str`, optional): is the language on which the tweet has been written, default value is `None`.
+        result_type (:obj:`str`, optional):
+            value to indicate which type of tweets want to be retrieved, it can either be `mixed`, `popular` or `recent`
+        count (:obj:`int`, optional): number of tweets per requests to retrieve (default and max is 100).
 
     Returns:
         :obj:`list` - tweets:
@@ -186,19 +202,22 @@ def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, la
         raise ValueError('screen_name is mandatory')
 
     if not isinstance(page_count, int):
-        raise ValueError('page_count must be an integer!')
+        raise ValueError('page_count must be an `int` higher than 1!')
 
-    if page_count is None:
-        raise ValueError('page_count is mandatory')
+    if not isinstance(language, str):
+        raise ValueError('language must be a `str`!')
 
     if not isinstance(filter_retweets, bool):
-        raise ValueError('filter_retweets must be a boolean!')
+        raise ValueError('filter_retweets must be a `boolean`!')
 
-    if filter_retweets is None:
-        raise ValueError('filter_retweets is mandatory')
+    if not isinstance(result_type, str):
+        raise ValueError('result_type must be a `str`')
 
-    if language is not None and not isinstance(language, str):
-        raise ValueError('language must be a string!')
+    if result_type not in ['mixed', 'popular', 'recent']:
+        raise ValueError('result_type can just be `mixed`, `popular` or `recent`')
+
+    if not isinstance(count, int):
+        raise ValueError('count must be an `int` between 1 and 100!')
 
     url = 'https://api.twitter.com/1.1/search/tweets.json?q=from:' + screen_name
 
@@ -215,7 +234,15 @@ def search_user_tweets(api, screen_name, page_count=5, filter_retweets=False, la
         else:
             raise ValueError('the introduced language does not exist.')
 
-    url += '&count=100'
+    if isinstance(count, int) and 0 < count <= 100:
+        url += '&count=' + str(count)
+    else:
+        url += '&count=100'
+
+    if isinstance(result_type, str) and result_type in ['mixed', 'popular', 'recent']:
+        url += '&result_type=' + result_type
+    else:
+        url += '&result_type=mixed'
 
     response, content = api.request(url, method='GET')
 
