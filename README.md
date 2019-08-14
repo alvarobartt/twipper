@@ -5,7 +5,9 @@
 [![Package Status](https://img.shields.io/pypi/status/twipper.svg)](https://pypi.org/project/twipper/)
 [![Downloads](https://img.shields.io/pypi/dm/twipper.svg?style=flat)](https://pypi.python.org/pypi/twipper)
 
-<div style="text-align:center"><img src="https://raw.githubusercontent.com/alvarob96/twipper/master/docs/twipper.png"/></div>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/alvarob96/twipper/master/docs/twipper.jpg" width="300" height="350"/>
+</p>
 
 ## Introduction
 
