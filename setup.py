@@ -18,7 +18,7 @@ setup(
     license='GNU General Public License v3 (GPLv3)',
     author='Alvaro Bartolome',
     author_email='alvarob96@usal.es',
-    description='twipper - is a Python package that works as a Twitter API Wrapper',
+    description='twipper - is a Twitter API wrapper for both free and premium plans developed on Python',
     long_description=readme(),
     long_description_content_type='text/markdown',
     install_requires=['requests==2.22.0',
@@ -30,6 +30,9 @@ setup(
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Intended Audience :: Developers",
         "Topic :: Scientific/Engineering :: Information Analysis",

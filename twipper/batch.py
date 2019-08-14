@@ -25,7 +25,7 @@ def search_tweets(access, query, page_count=1, filter_retweets=False,
         access (:obj:`twipper.credentials.Twipper`): object containing all the credentials needed to access api.twitter
         query (:obj:`str`): contains the query with the words to search along Twitter historic data.
         page_count (:obj:`int`, optional):
-            specifies the amount of pages (100 tweets per page) to retrieve data from, default value is 5.
+            specifies the amount of pages (100 tweets per page) to retrieve data from, default value is 1.
         filter_retweets (:obj:`boolean`, optional):
             can be either `True` or `False`, to filter out retweets or not, respectively, default value is `False`.
         language (:obj:`str`, optional): is the language on which the tweet has been written, default value is `None`.
@@ -175,7 +175,7 @@ def search_user_tweets(access, screen_name, page_count=1, filter_retweets=False,
         access (:obj:`twipper.credentials.Twipper`): object containing all the credentials needed to access api.twitter
         screen_name (:obj:`str`): contains the username of the user from which tweets are going to be retrieved.
         page_count (:obj:`int`, optional):
-            specifies the amount of pages (100 tweets per page) to retrieve data from, default value is 5.
+            specifies the amount of pages (100 tweets per page) to retrieve data from, default value is 1.
         filter_retweets (:obj:`boolean`, optional):
             can be either `True` or `False`, to filter out retweets or not, respectively, default value is `False`.
         language (:obj:`str`, optional): is the language on which the tweet has been written, default value is `None`.
