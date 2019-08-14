@@ -3,6 +3,8 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/twipper.svg)](https://pypi.org/project/twipper/)
 [![PyPi Version](https://img.shields.io/pypi/v/twipper.svg)](https://pypi.org/project/twipper/)
 [![Package Status](https://img.shields.io/pypi/status/twipper.svg)](https://pypi.org/project/twipper/)
+[![Build Status](https://dev.azure.com/alvarob96/alvarob96/_apis/build/status/alvarob96.twipper?branchName=master)](https://dev.azure.com/alvarob96/alvarob96/_build/latest?definitionId=1&branchName=master)
+[![Documentation Status](https://readthedocs.org/projects/twipper/badge/?version=latest)](https://twipper.readthedocs.io/en/latest/?badge=latest)
 [![Downloads](https://img.shields.io/pypi/dm/twipper.svg?style=flat)](https://pypi.python.org/pypi/twipper)
 
 <p align="center">
@@ -23,7 +25,7 @@ In order to get this package working you will need to install it using pip by ty
 
 Or just install the current release or a specific release version such as:
 
-``$ python -m pip install twipper==0.0.9``
+``$ python -m pip install twipper==0.1``
 
 ## Contribute
 
