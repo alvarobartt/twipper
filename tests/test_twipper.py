@@ -15,10 +15,10 @@ import twipper.premium as premium
 
 
 def test_twipper():
-    credentials = Twipper(consumer_key='cpFGICwRz8P7NPnJC95jqgCa6',
-                          consumer_secret='C4GhEz16wNd2F6I7k0S887lOBtqnraVAR0yc2PEBoz6GesYqXb',
-                          access_token='254490342-E6nbxVQg4Wmx93mQNrHWQXnJfr4G5eStTPX8sF00',
-                          access_token_secret='sUXFZa2nnEAoss9rgqAyrCGV0NF6qL55Xh4Rc42qiyfEe')
+    credentials = Twipper(consumer_key=os.environ['consumer_key'],
+                          consumer_secret=os.environ['consumer_secret'],
+                          access_token=os.environ['access_token'],
+                          access_token_secret=os.environ['access_token_secret'])
 
     credentials.plan = 'fullarchive'
     credentials.label = 'research'
@@ -32,27 +32,27 @@ def test_twipper():
                             result_type='mixed',
                             count=10)
 
-        # batch.search_user_tweets(access=credentials,
-        #                          screen_name='realDonaldTrump',
-        #                          page_count=1,
-        #                          filter_retweets=True,
-        #                          language='en',
-        #                          result_type='mixed',
-        #                          count=10)
-        #
-        # stream.stream_tweets(access=credentials,
-        #                      query='futbol',
-        #                      language='es',
-        #                      filter_retweets=False,
-        #                      tweet_limit=10,
-        #                      retry='no_limit')
-        #
-        # stream.stream_country_tweets(access=credentials,
-        #                              country='spain',
-        #                              language='es',
-        #                              filter_retweets=False,
-        #                              tweet_limit=10,
-        #                              retry='no_limit')
+        batch.search_user_tweets(access=credentials,
+                                 screen_name='realDonaldTrump',
+                                 page_count=1,
+                                 filter_retweets=True,
+                                 language='en',
+                                 result_type='mixed',
+                                 count=10)
+
+        stream.stream_tweets(access=credentials,
+                             query='futbol',
+                             language='es',
+                             filter_retweets=False,
+                             tweet_limit=10,
+                             retry='no_limit')
+
+        stream.stream_country_tweets(access=credentials,
+                                     country='spain',
+                                     language='es',
+                                     filter_retweets=False,
+                                     tweet_limit=10,
+                                     retry='no_limit')
 
         # premium.search_tweets(access=credentials,
         #                       query='futbol',

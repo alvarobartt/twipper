@@ -29,9 +29,8 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines pytest-cov coveralls
-    pytest --cov=investpy/
-    coveralls
+    pip install pytest pytest-azurepipelines
+    pytest
   env:
     consumer_key: $(consumer_key)
     consumer_secret: $(consumer_secret)
