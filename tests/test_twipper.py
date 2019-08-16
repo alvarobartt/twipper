@@ -54,19 +54,19 @@ def test_twipper():
                                      tweet_limit=10,
                                      retry='no_limit')
 
-        premium.search_tweets(access=credentials,
-                              query='futbol',
-                              page_count=1,
-                              from_date='201901010000',
-                              to_date='201901080000',
-                              language='es')
-
-        premium.search_user_tweets(access=credentials,
-                                   screen_name='realDonaldTrump',
-                                   page_count=1,
-                                   from_date='201901010000',
-                                   to_date='201901080000',
-                                   language='en')
+        # premium.search_tweets(access=credentials,
+        #                       query='futbol',
+        #                       page_count=1,
+        #                       from_date='201901010000',
+        #                       to_date='201901080000',
+        #                       language='es')
+        #
+        # premium.search_user_tweets(access=credentials,
+        #                            screen_name='realDonaldTrump',
+        #                            page_count=1,
+        #                            from_date='201901010000',
+        #                            to_date='201901080000',
+        #                            language='en')
 
     finally:
         credentials.close()
