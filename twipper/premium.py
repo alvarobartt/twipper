@@ -177,7 +177,7 @@ def search_tweets(access, query, page_count, from_date, to_date, language=None):
             raise IndexError('no tweets could be retrieved.')
 
 
-def wrapper_premium_user_search(access, screen_name, page_count, from_date, to_date, language=None):
+def search_user_tweets(access, screen_name, page_count, from_date, to_date, language=None):
     """
     This function retrieves historical tweets on batch processing from Twitter's Full Archive or 30Day from a specific
     user via its screen name (Twitter name). These tweets contain the specified words on the query, which can use

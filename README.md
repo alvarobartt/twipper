@@ -3,9 +3,9 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/twipper.svg)](https://pypi.org/project/twipper/)
 [![PyPi Version](https://img.shields.io/pypi/v/twipper.svg)](https://pypi.org/project/twipper/)
 [![Package Status](https://img.shields.io/pypi/status/twipper.svg)](https://pypi.org/project/twipper/)
-[![Build Status](https://dev.azure.com/alvarob96/alvarob96/_apis/build/status/alvarob96.twipper?branchName=master)](https://dev.azure.com/alvarob96/alvarob96/_build/latest?definitionId=1&branchName=master)
-[![Documentation Status](https://twipper.readthedocs.io/en/latest/?badge=latest)](https://twipper.readthedocs.io/)
-[![Downloads](https://img.shields.io/pypi/dm/twipper.svg?style=flat)](https://pypi.python.org/pypi/twipper)
+[![Build Status](https://dev.azure.com/alvarob96/alvarob96/_apis/build/status/alvarob96.twipper?branchName=master)](https://dev.azure.com/alvarob96/alvarob96/_build?definitionId=1&_a=summary)
+[![Documentation Status](https://readthedocs.org/projects/twipper/badge/?version=latest)](https://twipper.readthedocs.io/)
+[![Downloads](https://img.shields.io/pypi/dm/twipper.svg?style=flat)](https://pypistats.org/packages/twipper)
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/alvarob96/twipper/master/docs/twipper.jpg" width="300" height="350"/>
