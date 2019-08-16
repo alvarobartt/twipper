@@ -5,15 +5,18 @@ __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
 __version__ = '0.1'
 
 import pytest
+import os
 
 from twipper.credentials import Twipper
 
 
 def test_credentials():
-    credentials = Twipper(consumer_key='4mfeYj9SH1PXsff5HgZ5bTOzW',
-                          consumer_secret='aiEfkE5tYCKcKEg42OcHbNgVvA2uikwwpRuBYwl5VmGSAm7N7e',
-                          access_token='254490342-xIGPeyGYLDyD1uFIVgybDsd9ImUPaz467kowIoem',
-                          access_token_secret='JrEuYnm1s44JR46AQDdoJagee3Uw9Ip0jxlp7z3XFcPDg')
+    credentials = Twipper(consumer_key=os.environ['consumer_key'],
+                          consumer_secret=os.environ['consumer_secret'],
+                          access_token=os.environ['access_token'],
+                          access_token_secret=os.environ['access_token_secret'])
+
+    print(os.environ['consumer_key'], os.environ['access_token'])
 
     credentials.plan = 'fullarchive'
     print(credentials.plan)
