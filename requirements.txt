@@ -1,4 +1,4 @@
-setuptools==40.6.3
+setuptools==41.1.0
 requests_oauthlib==1.2.0
 requests==2.22.0
 oauth2==1.9.0.post1

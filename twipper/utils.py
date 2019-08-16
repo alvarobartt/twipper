@@ -8,7 +8,7 @@ import json
 import requests
 
 
-def available_languages(access):
+def available_languages(api):
     """
     This function retrieves all the languages in which the language of a tweet can be detected,
     as they are the languages that Twitter works with. This function allows the system to check if
@@ -16,7 +16,7 @@ def available_languages(access):
     https://developer.twitter.com/en/docs/developer-utilities/supported-languages/api-reference/get-help-languages.html
 
     Args:
-        access (:obj:`twipper.credentials.Twipper`): object containing all the credentials needed to access api.twitter
+        api (:obj:`oauth2.Client`): api object with access to api.twitter
 
     Returns:
         :obj:`list` - languages:
@@ -29,14 +29,13 @@ def available_languages(access):
         IndexError: raised if the retrieved languages `list` is empty.
     """
 
-    api = access.api
-
     url = 'https://api.twitter.com/1.1/help/languages.json'
 
     response, content = api.request(url, method='GET')
 
     if response.status != 200:
-        raise ConnectionError('connection to `api.twitter` could not be established.')
+        raise ConnectionError('connection to `api.twitter` could not be established (HTTP Error ' +
+                              str(response.status) + ').')
 
     try:
         data = json.loads(content.decode('utf-8'))

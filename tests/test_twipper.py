@@ -9,7 +9,6 @@ import pytest
 import os
 
 from twipper.credentials import Twipper
-
 import twipper.batch as batch
 import twipper.streaming as stream
 import twipper.premium as premium
@@ -22,6 +21,7 @@ def test_twipper():
                           access_token_secret=os.environ['access_token_secret'])
 
     credentials.plan = 'fullarchive'
+    credentials.label = 'research'
 
     try:
         batch.search_tweets(access=credentials,
@@ -44,14 +44,14 @@ def test_twipper():
                              query='futbol',
                              language='es',
                              filter_retweets=False,
-                             tweet_limit=3,
+                             tweet_limit=10,
                              retry='no_limit')
 
         stream.stream_country_tweets(access=credentials,
                                      country='spain',
                                      language='es',
                                      filter_retweets=False,
-                                     tweet_limit=3,
+                                     tweet_limit=10,
                                      retry='no_limit')
 
         premium.search_tweets(access=credentials,
