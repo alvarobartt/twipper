@@ -22,11 +22,6 @@ steps:
   inputs:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
-  env:
-    consumer_key: $(consumer_key)
-    consumer_secret: $(consumer_secret)
-    access_token: $(access_token)
-    access_token_secret: $(access_token_secret)
 
 - script: |
     python -m pip install --upgrade pip
@@ -36,4 +31,9 @@ steps:
 - script: |
     pip install pytest pytest-azurepipelines
     pytest
+  env:
+    consumer_key: $(consumer_key)
+    consumer_secret: $(consumer_secret)
+    access_token: $(access_token)
+    access_token_secret: $(access_token_secret)
   displayName: 'pytest'
