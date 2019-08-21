@@ -4,6 +4,7 @@
 [![PyPi Version](https://img.shields.io/pypi/v/twipper.svg)](https://pypi.org/project/twipper/)
 [![Package Status](https://img.shields.io/pypi/status/twipper.svg)](https://pypi.org/project/twipper/)
 [![Build Status](https://dev.azure.com/alvarob96/alvarob96/_apis/build/status/alvarob96.twipper?branchName=master)](https://dev.azure.com/alvarob96/alvarob96/_build?definitionId=1&_a=summary)
+[![Build Status](https://img.shields.io/travis/alvarob96/twipper/master.svg?label=Travis%20CI&logo=travis&logoColor=white)](https://travis-ci.org/alvarob96/twipper)
 [![Documentation Status](https://readthedocs.org/projects/twipper/badge/?version=latest)](https://twipper.readthedocs.io/)
 [![Downloads](https://img.shields.io/pypi/dm/twipper.svg?style=flat)](https://pypistats.org/packages/twipper)
 

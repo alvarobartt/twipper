@@ -24,7 +24,7 @@ setup(
     install_requires=['requests==2.22.0',
                       'requests_oauthlib==1.2.0',
                       'oauth2==1.9.0.post1',
-                      'setuptools==40.6.3'],
+                      'setuptools==41.2.0'],
     data_files=[],
     include_package_data=True,
     classifiers=[
