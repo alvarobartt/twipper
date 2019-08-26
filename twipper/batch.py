@@ -56,8 +56,8 @@ def search_tweets(access, query, page_count=1, filter_retweets=False,
     if query is None:
         raise ValueError('query is mandatory')
 
-    if not isinstance(page_count, int):
-        raise ValueError('page_count must be an `int` higher than 1!')
+    if not isinstance(page_count, int) and page_count > 0:
+        raise ValueError('page_count must be an `int` equal or higher than 1!')
 
     if not isinstance(language, str):
         raise ValueError('language must be a `str`!')

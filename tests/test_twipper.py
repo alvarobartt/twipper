@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.1'
+# Copyright 2018-2019 Alvaro Bartolome
+# See LICENSE for details.
 
 import pytest
 
