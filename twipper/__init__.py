@@ -6,3 +6,5 @@
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
 __version__ = '0.1.1'
+
+from twipper.credentials import Twipper

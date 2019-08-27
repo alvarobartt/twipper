@@ -1,7 +1,6 @@
 Contribute
 ==========
 
-
 As this is an open source project it is open to contributions, bug reports, bug fixes, documentation improvements,
 enhancements and ideas.
 
