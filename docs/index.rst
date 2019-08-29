@@ -17,6 +17,9 @@ Welcome to twipper's documentation!
 
    introduction.rst
    installation.rst
+   batch.rst
+   streaming.rst
+   premium.rst
    usage.rst
    api.rst
    contribute.rst
