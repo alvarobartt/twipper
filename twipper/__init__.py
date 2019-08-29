@@ -5,6 +5,6 @@
 # See LICENSE for details.
 
 __author__ = 'Alvaro Bartolome @ alvarob96 on GitHub'
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 from twipper.credentials import Twipper
