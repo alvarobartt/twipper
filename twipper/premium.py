@@ -3,6 +3,7 @@
 
 # Copyright 2018-2019 Alvaro Bartolome
 # See LICENSE for details.
+
 import datetime
 import json
 
@@ -13,7 +14,7 @@ from twipper.credentials import Twipper
 from twipper.utils import available_languages
 
 
-def search_tweets(access, query, page_count, from_date, to_date, language=None):
+def search_tweets(access, query, page_count, from_date, to_date, language=None, filter_retweets=False):
     """
     This function retrieves historical tweets on batch processing from Twitter's Full Archive or 30Day. These tweets
     contain the specified words on the query, which can use premium operators as specified on
@@ -29,6 +30,8 @@ def search_tweets(access, query, page_count, from_date, to_date, language=None):
         from_date (:obj:`str`): starting date of the time interval to retrieve tweets from (`yyyymmddhhmm` format)
         to_date (:obj:`str`): end date of the time interval to retrieve tweets from (`yyyymmddhhmm` format)
         language (:obj:`str`): is the language on which the tweet has been written.
+        filter_retweets (:obj:`boolean`, optional):
+            can be either `True` or `False`, to filter out retweets or not, respectively.
 
     Returns:
         tweets (:obj:`list`): description
@@ -111,6 +114,9 @@ def search_tweets(access, query, page_count, from_date, to_date, language=None):
         else:
             raise ValueError('the introduced language does not exist.')
 
+    if filter_retweets:
+        query += ' -is:retweet'
+
     data = {
         'query': query,
         'fromDate': from_date,
@@ -177,7 +183,7 @@ def search_tweets(access, query, page_count, from_date, to_date, language=None):
             raise IndexError('no tweets could be retrieved.')
 
 
-def search_user_tweets(access, screen_name, page_count, from_date, to_date, language=None):
+def search_user_tweets(access, screen_name, page_count, from_date, to_date, language=None, filter_retweets=False):
     """
     This function retrieves historical tweets on batch processing from Twitter's Full Archive or 30Day from a specific
     user via its screen name (Twitter name). These tweets contain the specified words on the query, which can use
@@ -196,6 +202,8 @@ def search_user_tweets(access, screen_name, page_count, from_date, to_date, lang
         from_date (:obj:`str`): starting date of the time interval to retrieve tweets from (`yyyymmddhhmm` format)
         to_date (:obj:`str`): end date of the time interval to retrieve tweets from (`yyyymmddhhmm` format)
         language (:obj:`str`): is the language on which the tweet has been written.
+        filter_retweets (:obj:`boolean`, optional):
+            can be either `True` or `False`, to filter out retweets or not, respectively.
 
     Returns:
         tweets (:obj:`list`): description
@@ -279,6 +287,9 @@ def search_user_tweets(access, screen_name, page_count, from_date, to_date, lang
             query += ' lang:' + language
         else:
             raise ValueError('the introduced language does not exist.')
+
+    if filter_retweets:
+        query += ' -is:retweet'
 
     data = {
         'query': query,
