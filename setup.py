@@ -11,10 +11,10 @@ def readme():
 
 setup(
     name='twipper',
-    version='0.1.2',
+    version='0.1.3',
     packages=find_packages(),
     url='https://github.com/alvarob96/twipper',
-    download_url='https://github.com/alvarob96/twipper/archive/0.1.2.tar.gz',
+    download_url='https://github.com/alvarob96/twipper/archive/0.1.3.tar.gz',
     license='GNU General Public License v3 (GPLv3)',
     author='Alvaro Bartolome',
     author_email='alvarob96@usal.es',
@@ -38,5 +38,11 @@ setup(
         "Topic :: Scientific/Engineering :: Information Analysis",
         "Topic :: Software Development :: Libraries",
     ],
-    keywords='twitter, wrapper, api'
+    keywords='twitter, wrapper, api',
+    python_requires='>=3',
+    project_urls={
+        'Bug Reports': 'https://github.com/alvarob96/twipper/issues',
+        'Source': 'https://github.com/alvarob96/twipper',
+        'Documentation': 'https://twipper.readthedocs.io/'
+    },
 )

@@ -11,12 +11,6 @@ install:
   - pip install -r requirements.txt
   - pip install twipper==0.1.2
   - pip install pytest==4.5.0
-  - pip install codecov==2.0.15
-  - pip install pytest-cov==2.7.1
-  - pip install coveralls==1.8.2
 
 script:
-  - pytest --cov-report term --cov=twipper tests/
-
-after_success:
-  - coveralls
+  - pytest

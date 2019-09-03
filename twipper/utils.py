@@ -6,6 +6,7 @@
 
 import json
 import requests
+import re
 
 
 def available_languages(api):
@@ -100,3 +101,75 @@ def country_to_bounding_box(country):
     bounding_box = ','.join(result)
 
     return bounding_box
+
+
+def standard_query(query):
+    """
+    This function converts the introduced query formatted as specified by twipper, so to make ease to use
+    it as Twitter specifies different query formats for batch and streaming query. So on this function is intended
+    to be used combined with any Twitter Wrapper to improve queries usability. API Reference:
+    https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators
+
+    Args:
+        query (:obj:`str`): query formatted as specified by twipper to be converted onto a Twitter Batch query
+
+    Returns:
+        :obj:`str` - formatted_query:
+            Returns a :obj:`str` which is the query formatted as required by Twitter, so the twipper-format of the
+            initial query is now converted to the required format.
+
+    Raises:
+        ValueError: raised if the introduced arguments do not match or errored.
+        RuntimeError: raised if the resulting query is not valid.
+    """
+
+    if not query:
+        raise ValueError('`query` parameter is mandatory and should be a str!')
+
+    if query is not None and not isinstance(query, str):
+        raise ValueError('`query` parameter is mandatory and should be a str!')
+
+    query = ''.join(re.findall('[a-zA-Zá-üÁ-Ü]+', query))
+
+    query = query.replace('AND', ' ').replace('OR', ' OR ').replace('NOT', '-')
+
+    if len(query) > 0:
+        return query
+    else:
+        raise RuntimeError('`query formatting failed due to introduced query error')
+
+
+def streaming_query(query):
+    """
+    This function converts the introduced query formatted as specified by twipper, so to make ease to use
+    it as Twitter specifies different query formats for batch and streaming query. So on this function is intended
+    to be used combined with any Twitter Wrapper to improve queries usability. API Reference:
+    https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters#track
+
+    Args:
+        query (:obj:`str`): query formatted as specified by twipper to be converted onto a Twitter Stream track query
+
+    Returns:
+        :obj:`str` - formatted_query:
+            Returns a :obj:`str` which is the query formatted as required by Twitter, so the twipper-format of the
+            initial query is now converted to the required format.
+
+    Raises:
+        ValueError: raised if the introduced arguments do not match or errored.
+        RuntimeError: raised if the resulting query is not valid.
+    """
+
+    if not query:
+        raise ValueError('`query` parameter is mandatory and should be a str!')
+
+    if query is not None and not isinstance(query, str):
+        raise ValueError('`query` parameter is mandatory and should be a str!')
+
+    query = ''.join(re.findall('[a-zA-Zá-üÁ-Ü]+', query))
+
+    query = query.replace('AND', ' ').replace('OR', ',').replace('NOT', '-')
+
+    if len(query) > 0:
+        return query
+    else:
+        raise RuntimeError('`query formatting failed due to introduced query error')

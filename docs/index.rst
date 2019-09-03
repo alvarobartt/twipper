@@ -20,6 +20,7 @@ Welcome to twipper's documentation!
    batch.rst
    streaming.rst
    premium.rst
+   queries.rst
    usage.rst
    api.rst
    contribute.rst
