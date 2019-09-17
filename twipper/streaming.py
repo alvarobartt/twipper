@@ -120,86 +120,118 @@ def stream_tweets(access, query, language=None, filter_retweets=False,
         'Content-Type': 'application/json',
     }
 
-    response = requests.post(url, auth=oauth, headers=headers, params=params, stream=True)
-
-    if response.status_code != 200:
-        raise ConnectionError('connection errored with code ' + str(response.status_code) + '.')
-
     if isinstance(retry, str) and retry == 'no_limit':
         retries = -1
     else:
         retries = retry
 
+    flag = False
+
     if tweet_limit:
         tweet_counter = 0
 
-        for line in response.iter_lines():
-            if tweet_limit == tweet_counter:
-                break
+        while flag is False:
+            response = requests.post(url, auth=oauth, headers=headers, params=params, stream=True)
 
-            if retries == 0:
-                break
+            if response.status_code != 200:
+                raise ConnectionError('connection errored with code ' + str(response.status_code) + '.')
 
-            try:
-                tweet = json.loads(line.decode('utf-8'))
-            except json.decoder.JSONDecodeError:
-                retries -= 1
-                continue
+            for line in response.iter_lines():
+                if not line:
+                    flag = True
+                    break
 
-            if filter_retweets:
-                if 'retweeted_status' not in tweet:
+                if tweet_limit == tweet_counter:
+                    flag = True
+                    break
+
+                if retries == 0:
+                    flag = True
+                    break
+
+                try:
+                    tweet = json.loads(line.decode('utf-8'))
+                except json.decoder.JSONDecodeError:
+                    retries -= 1
+                    continue
+
+                if filter_retweets:
+                    if 'retweeted_status' not in tweet:
+                        yield tweet
+                        tweet_counter += 1
+                else:
                     yield tweet
                     tweet_counter += 1
-            else:
-                yield tweet
-                tweet_counter += 1
 
     elif date_limit is not None:
+        while flag is False:
+            response = requests.post(url, auth=oauth, headers=headers, params=params, stream=True)
 
-        for line in response.iter_lines():
-            current_date = datetime.datetime.now().strftime('%Y%m%d%H%M')
-            if current_date >= date_limit:
-                break
+            if response.status_code != 200:
+                raise ConnectionError('connection errored with code ' + str(response.status_code) + '.')
 
-            if retries == 0:
-                break
+            for line in response.iter_lines():
+                if not line:
+                    flag = True
+                    break
 
-            try:
-                tweet = json.loads(line.decode('utf-8'))
-            except json.decoder.JSONDecodeError:
-                retries -= 1
-                continue
+                current_date = datetime.datetime.now().strftime('%Y%m%d%H%M')
+                if current_date >= date_limit:
+                    flag = True
+                    break
 
-            if filter_retweets:
-                if 'retweeted_status' not in tweet:
+                if retries == 0:
+                    flag = True
+                    break
+
+                try:
+                    tweet = json.loads(line.decode('utf-8'))
+                except json.decoder.JSONDecodeError:
+                    retries -= 1
+                    continue
+
+                if filter_retweets:
+                    if 'retweeted_status' not in tweet:
+                        yield tweet
+                else:
                     yield tweet
-            else:
-                yield tweet
 
     else:
         tweet_limit = 1000
         tweet_counter = 0
 
-        for line in response.iter_lines():
-            if tweet_limit == tweet_counter:
-                break
+        while flag is False:
+            response = requests.post(url, auth=oauth, headers=headers, params=params, stream=True)
 
-            if retries == 0:
-                break
+            if response.status_code != 200:
+                raise ConnectionError('connection errored with code ' + str(response.status_code) + '.')
 
-            try:
-                tweet = json.loads(line.decode('utf-8'))
-            except json.decoder.JSONDecodeError:
-                retries -= 1
-                continue
+            for line in response.iter_lines():
+                if not line:
+                    flag = True
+                    break
 
-            if filter_retweets:
-                if 'retweeted_status' not in tweet:
+                if tweet_limit == tweet_counter:
+                    flag = True
+                    break
+
+                if retries == 0:
+                    flag = True
+                    break
+
+                try:
+                    tweet = json.loads(line.decode('utf-8'))
+                except json.decoder.JSONDecodeError:
+                    retries -= 1
+                    continue
+
+                if filter_retweets:
+                    if 'retweeted_status' not in tweet:
+                        yield tweet
+                        tweet_counter += 1
+                else:
                     yield tweet
                     tweet_counter += 1
-            else:
-                yield tweet
-                tweet_counter += 1
 
 
 def stream_country_tweets(access, country, language=None, filter_retweets=False,
@@ -306,83 +338,116 @@ def stream_country_tweets(access, country, language=None, filter_retweets=False,
         'Content-Type': 'application/json',
     }
 
-    response = requests.post(url, auth=oauth, headers=headers, params=params, stream=True)
-
-    if response.status_code != 200:
-        raise ConnectionError('connection errored with code ' + str(response.status_code))
-
     if isinstance(retry, str) and retry == 'no_limit':
         retries = -1
     else:
         retries = retry
 
+    flag = False
+
     if tweet_limit:
         tweet_counter = 0
 
-        for line in response.iter_lines():
-            if tweet_limit == tweet_counter:
-                break
+        while flag is False:
+            response = requests.post(url, auth=oauth, headers=headers, params=params, stream=True)
 
-            if retries == 0:
-                break
+            if response.status_code != 200:
+                raise ConnectionError('connection errored with code ' + str(response.status_code))
 
-            try:
-                tweet = json.loads(line.decode('utf-8'))
-            except json.decoder.JSONDecodeError:
-                retries -= 1
-                continue
+            for line in response.iter_lines():
+                if not line:
+                    flag = True
+                    break
 
-            if filter_retweets:
-                if 'retweeted_status' not in tweet:
+                if tweet_limit == tweet_counter:
+                    flag = True
+                    break
+
+                if retries == 0:
+                    flag = True
+                    break
+
+                try:
+                    tweet = json.loads(line.decode('utf-8'))
+                except json.decoder.JSONDecodeError:
+                    retries -= 1
+                    continue
+
+                if filter_retweets:
+                    if 'retweeted_status' not in tweet:
+                        yield tweet
+                        tweet_counter += 1
+                else:
                     yield tweet
                     tweet_counter += 1
-            else:
-                yield tweet
-                tweet_counter += 1
 
     elif date_limit is not None:
 
-        for line in response.iter_lines():
-            current_date = datetime.datetime.now().strftime('%Y%m%d%H%M')
-            if current_date >= date_limit:
-                break
+        while flag is False:
+            response = requests.post(url, auth=oauth, headers=headers, params=params, stream=True)
 
-            if retries == 0:
-                break
+            if response.status_code != 200:
+                raise ConnectionError('connection errored with code ' + str(response.status_code))
 
-            try:
-                tweet = json.loads(line.decode('utf-8'))
-            except json.decoder.JSONDecodeError:
-                retries -= 1
-                continue
+            for line in response.iter_lines():
+                if not line:
+                    flag = True
+                    break
 
-            if filter_retweets:
-                if 'retweeted_status' not in tweet:
+                current_date = datetime.datetime.now().strftime('%Y%m%d%H%M')
+                if current_date >= date_limit:
+                    flag = True
+                    break
+
+                if retries == 0:
+                    flag = True
+                    break
+
+                try:
+                    tweet = json.loads(line.decode('utf-8'))
+                except json.decoder.JSONDecodeError:
+                    retries -= 1
+                    continue
+
+                if filter_retweets:
+                    if 'retweeted_status' not in tweet:
+                        yield tweet
+                else:
                     yield tweet
-            else:
-                yield tweet
 
     else:
         tweet_limit = 1000
         tweet_counter = 0
 
-        for line in response.iter_lines():
-            if tweet_limit == tweet_counter:
-                break
+        while flag is False:
+            response = requests.post(url, auth=oauth, headers=headers, params=params, stream=True)
 
-            if retries == 0:
-                break
+            if response.status_code != 200:
+                raise ConnectionError('connection errored with code ' + str(response.status_code))
 
-            try:
-                tweet = json.loads(line.decode('utf-8'))
-            except json.decoder.JSONDecodeError:
-                retries -= 1
-                continue
+            for line in response.iter_lines():
+                if not line:
+                    flag = True
+                    break
 
-            if filter_retweets:
-                if 'retweeted_status' not in tweet:
+                if tweet_limit == tweet_counter:
+                    flag = True
+                    break
+
+                if retries == 0:
+                    flag = True
+                    break
+
+                try:
+                    tweet = json.loads(line.decode('utf-8'))
+                except json.decoder.JSONDecodeError:
+                    retries -= 1
+                    continue
+
+                if filter_retweets:
+                    if 'retweeted_status' not in tweet:
+                        yield tweet
+                        tweet_counter += 1
+                else:
                     yield tweet
                     tweet_counter += 1
-            else:
-                yield tweet
-                tweet_counter += 1
