@@ -131,8 +131,8 @@ def search_tweets(access, query, page_count, from_date, to_date, language=None, 
     tweets = list()
 
     if response.status_code != 200:
-        raise ConnectionError('connection to api.twitter could not be established, with error \
-        code ' + str(response.status_code))
+        raise ConnectionError('connection to api.twitter could not be established, with error '
+                              'code ' + str(response.status_code))
 
     result = response.json()
 

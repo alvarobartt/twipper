@@ -138,7 +138,6 @@ def stream_tweets(access, query, language=None, filter_retweets=False,
 
             for line in response.iter_lines():
                 if not line:
-                    flag = True
                     break
 
                 if tweet_limit == tweet_counter:
@@ -172,7 +171,6 @@ def stream_tweets(access, query, language=None, filter_retweets=False,
 
             for line in response.iter_lines():
                 if not line:
-                    flag = True
                     break
 
                 current_date = datetime.datetime.now().strftime('%Y%m%d%H%M')
@@ -208,7 +206,6 @@ def stream_tweets(access, query, language=None, filter_retweets=False,
 
             for line in response.iter_lines():
                 if not line:
-                    flag = True
                     break
 
                 if tweet_limit == tweet_counter:
@@ -356,7 +353,6 @@ def stream_country_tweets(access, country, language=None, filter_retweets=False,
 
             for line in response.iter_lines():
                 if not line:
-                    flag = True
                     break
 
                 if tweet_limit == tweet_counter:
@@ -391,7 +387,6 @@ def stream_country_tweets(access, country, language=None, filter_retweets=False,
 
             for line in response.iter_lines():
                 if not line:
-                    flag = True
                     break
 
                 current_date = datetime.datetime.now().strftime('%Y%m%d%H%M')
@@ -427,7 +422,6 @@ def stream_country_tweets(access, country, language=None, filter_retweets=False,
 
             for line in response.iter_lines():
                 if not line:
-                    flag = True
                     break
 
                 if tweet_limit == tweet_counter:
