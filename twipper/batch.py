@@ -100,6 +100,8 @@ def search_tweets(access, query, page_count=1, filter_retweets=False,
     else:
         url += '&result_type=mixed'
 
+    url += '&tweet_mode=extended'
+
     response, content = api.request(url, method='GET')
 
     if response.status != 200:
@@ -248,6 +250,8 @@ def search_user_tweets(access, screen_name, page_count=1, filter_retweets=False,
         url += '&result_type=' + result_type
     else:
         url += '&result_type=mixed'
+
+    url += '&tweet_mode=extended'
 
     response, content = api.request(url, method='GET')
 

@@ -129,7 +129,7 @@ def standard_query(query):
     if query is not None and not isinstance(query, str):
         raise ValueError('`query` parameter is mandatory and should be a str!')
 
-    query = ''.join(re.findall('[a-zA-Zá-üÁ-Ü]+', query))
+    query = ''.join(re.findall('[a-zA-Zá-üÁ-Ü0-9]+', query))
 
     query = query.replace('AND', ' ').replace('OR', ' OR ').replace('NOT', '-')
 
@@ -165,7 +165,7 @@ def streaming_query(query):
     if query is not None and not isinstance(query, str):
         raise ValueError('`query` parameter is mandatory and should be a str!')
 
-    query = ''.join(re.findall('[a-zA-Zá-üÁ-Ü]+', query))
+    query = ''.join(re.findall('[a-zA-Zá-üÁ-Ü0-9]+', query))
 
     query = query.replace('AND', ' ').replace('OR', ',').replace('NOT', '-')
 
