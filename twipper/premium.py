@@ -71,6 +71,9 @@ def search_tweets(access, query, page_count, from_date, to_date, language=None, 
     if not page_count or not isinstance(page_count, int):
         raise ValueError('page_count must be an `int`!')
 
+    if isinstance(page_count, int) and page_count < 1:
+        raise ValueError('page_count must be an `int` equal or higher than 1!')
+
     if not from_date or not isinstance(from_date, str):
         raise ValueError('from_date must be a `bool`!')
 
@@ -149,33 +152,34 @@ def search_tweets(access, query, page_count, from_date, to_date, language=None, 
     else:
         next_page = result['next']
 
-        for _ in range(page_count - 1):
-            data = {
-                'query': query,
-                'fromDate': from_date,
-                'toDate': to_date,
-                'maxResults': 100,
-                'next': next_page
-            }
+        if page_count > 1:
+            for _ in range(page_count - 1):
+                data = {
+                    'query': query,
+                    'fromDate': from_date,
+                    'toDate': to_date,
+                    'maxResults': 100,
+                    'next': next_page
+                }
 
-            data = json.dumps(data)
+                data = json.dumps(data)
 
-            response = requests.post(url, headers=headers, data=data)
+                response = requests.post(url, headers=headers, data=data)
 
-            if response.status_code != 200:
-                break
+                if response.status_code != 200:
+                    break
 
-            result = response.json()
+                result = response.json()
 
-            if 'results' in result:
-                tweets += result['results']
-            else:
-                break
+                if 'results' in result:
+                    tweets += result['results']
+                else:
+                    break
 
-            if 'next' in result:
-                next_page = result['next']
-            else:
-                break
+                if 'next' in result:
+                    next_page = result['next']
+                else:
+                    break
 
         if len(tweets) > 0:
             return tweets
@@ -242,6 +246,9 @@ def search_user_tweets(access, screen_name, page_count, from_date, to_date, lang
 
     if not page_count or not isinstance(page_count, int):
         raise ValueError('page_count must be an `int`!')
+
+    if isinstance(page_count, int) and page_count < 1:
+        raise ValueError('page_count must be an `int` equal or higher than 1!')
 
     if not from_date or not isinstance(from_date, str):
         raise ValueError('from_date must be a `bool`!')
@@ -323,33 +330,34 @@ def search_user_tweets(access, screen_name, page_count, from_date, to_date, lang
     else:
         next_page = result['next']
 
-        for _ in range(page_count - 1):
-            data = {
-                'query': query,
-                'fromDate': from_date,
-                'toDate': to_date,
-                'maxResults': 100,
-                'next': next_page
-            }
+        if page_count > 1:
+            for _ in range(page_count - 1):
+                data = {
+                    'query': query,
+                    'fromDate': from_date,
+                    'toDate': to_date,
+                    'maxResults': 100,
+                    'next': next_page
+                }
 
-            data = json.dumps(data)
+                data = json.dumps(data)
 
-            response = requests.post(url, headers=headers, data=data)
+                response = requests.post(url, headers=headers, data=data)
 
-            if response.status_code != 200:
-                break
+                if response.status_code != 200:
+                    break
 
-            result = response.json()
+                result = response.json()
 
-            if 'results' in result:
-                tweets += result['results']
-            else:
-                break
+                if 'results' in result:
+                    tweets += result['results']
+                else:
+                    break
 
-            if 'next' in result:
-                next_page = result['next']
-            else:
-                break
+                if 'next' in result:
+                    next_page = result['next']
+                else:
+                    break
 
         if len(tweets) > 0:
             return tweets

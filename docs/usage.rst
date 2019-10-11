@@ -20,15 +20,18 @@ tweets to analyze its content to launch a cat campaign for our brand (random exa
 
 .. code-block:: python
 
-    tweets = twipper.batch.search_tweets(access=credentials,
-                                         query='cats',
-                                         page_count=1,
-                                         filter_retweets=True,
-                                         language='en',
-                                         result_type='popular',
-                                         count=10)
+    from twipper.batch import search_tweets
 
-So on, using ``batch`` functions you can retrieve historical *tweets* from the last 7-9 days matching the introduced
+    tweets = search_tweets(access=cred,
+                           query='cats',
+                           page_count=1,
+                           filter_retweets=True,
+                           verified_account=False,
+                           language='en',
+                           result_type='popular',
+                           count=10)
+
+So on, using ``batch`` functions you can retrieve historical *tweets* from the last 7-30 days matching the introduced
 query, in this case the query is `cats` due to our cat campaign, remember it. Anyways, params can be adjusted to our
 desires and/or needs as described on the API Reference.
 

@@ -8,4 +8,4 @@ In order to get this package working you will need to install it using pip by ty
 
 Or just install the current release or a specific release version such as::
 
-    $ python -m pip install twipper==0.1.4
+    $ python -m pip install twipper==0.1.5

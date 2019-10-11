@@ -11,7 +11,6 @@ import os
 from twipper.credentials import Twipper
 import twipper.batch as batch
 import twipper.streaming as stream
-import twipper.premium as premium
 
 
 def test_twipper():

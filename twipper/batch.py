@@ -11,7 +11,7 @@ from twipper.credentials import Twipper
 from twipper.utils import available_languages
 
 
-def search_tweets(access, query, page_count=1, filter_retweets=False,
+def search_tweets(access, query, page_count=1, filter_retweets=False, verified_account=False,
                   language=None, result_type='mixed', count=100):
     """
     This function retrieves historical tweets on batch processing. These tweets contain the specified words on the
@@ -28,6 +28,9 @@ def search_tweets(access, query, page_count=1, filter_retweets=False,
             specifies the amount of pages (100 tweets per page) to retrieve data from, default value is 1.
         filter_retweets (:obj:`boolean`, optional):
             can be either `True` or `False`, to filter out retweets or not, respectively, default value is `False`.
+        verified_account (:obj:`boolean`, optional):
+            can either be True or False to retrieve tweets just from verified accounts or from any account type,
+            respectively.
         language (:obj:`str`, optional): is the language on which the tweet has been written, default value is `None`.
         result_type (:obj:`str`, optional):
             value to indicate which type of tweets want to be retrieved, it can either be `mixed`, `popular` or `recent`
@@ -56,7 +59,10 @@ def search_tweets(access, query, page_count=1, filter_retweets=False,
     if query is None:
         raise ValueError('query is mandatory')
 
-    if not isinstance(page_count, int) and page_count > 0:
+    if not isinstance(page_count, int) or not page_count:
+        raise ValueError('page_count must be an `int` equal or higher than 1!')
+
+    if isinstance(page_count, int) and page_count < 1:
         raise ValueError('page_count must be an `int` equal or higher than 1!')
 
     if not isinstance(language, str):
@@ -64,6 +70,9 @@ def search_tweets(access, query, page_count=1, filter_retweets=False,
 
     if not isinstance(filter_retweets, bool):
         raise ValueError('filter_retweets must be a `boolean`!')
+
+    if not isinstance(verified_account, bool):
+        raise ValueError('verified_account must be a `boolean`!')
 
     if not isinstance(result_type, str):
         raise ValueError('result_type must be a `str`')
@@ -73,6 +82,9 @@ def search_tweets(access, query, page_count=1, filter_retweets=False,
 
     if not isinstance(count, int):
         raise ValueError('count must be an `int` between 1 and 100!')
+
+    if verified_account:
+        query += " filter:verified"
 
     url = 'https://api.twitter.com/1.1/search/tweets.json?q=' + query
 
@@ -132,32 +144,33 @@ def search_tweets(access, query, page_count=1, filter_retweets=False,
 
     base_url = 'https://api.twitter.com/1.1/search/tweets.json'
 
-    for _ in range(page_count):
-        response, content = api.request(base_url + next_url, method='GET')
+    if page_count > 1:
+        for _ in range(page_count - 1):
+            response, content = api.request(base_url + next_url, method='GET')
 
-        if response.status != 200:
-            break
+            if response.status != 200:
+                break
 
-        try:
-            data = json.loads(content.decode('utf-8'))
-        except json.decoder.JSONDecodeError:
-            break
+            try:
+                data = json.loads(content.decode('utf-8'))
+            except json.decoder.JSONDecodeError:
+                break
 
-        if 'statuses' in data:
-            if len(data['statuses']) > 0:
-                tweets += data['statuses']
+            if 'statuses' in data:
+                if len(data['statuses']) > 0:
+                    tweets += data['statuses']
 
-                if 'search_metadata' in data:
-                    if 'next_results' in data['search_metadata']:
-                        next_url = data['search_metadata']['next_results']
+                    if 'search_metadata' in data:
+                        if 'next_results' in data['search_metadata']:
+                            next_url = data['search_metadata']['next_results']
+                        else:
+                            break
                     else:
                         break
                 else:
                     break
             else:
                 break
-        else:
-            break
 
     if len(tweets) > 0:
         return tweets
@@ -208,8 +221,11 @@ def search_user_tweets(access, screen_name, page_count=1, filter_retweets=False,
     if screen_name is None:
         raise ValueError('screen_name is mandatory')
 
-    if not isinstance(page_count, int):
-        raise ValueError('page_count must be an `int` higher than 1!')
+    if not isinstance(page_count, int) or not page_count:
+        raise ValueError('page_count must be an `int` equal or higher than 1!')
+
+    if isinstance(page_count, int) and page_count < 1:
+        raise ValueError('page_count must be an `int` equal or higher than 1!')
 
     if not isinstance(language, str):
         raise ValueError('language must be a `str`!')
@@ -230,6 +246,7 @@ def search_user_tweets(access, screen_name, page_count=1, filter_retweets=False,
 
     if filter_retweets:
         url += ' -filter:retweets'
+
     try:
         languages = available_languages(api)
     except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
@@ -283,32 +300,33 @@ def search_user_tweets(access, screen_name, page_count=1, filter_retweets=False,
 
     base_url = 'https://api.twitter.com/1.1/search/tweets.json'
 
-    for _ in range(page_count):
-        response, content = api.request(base_url + next_url, method='GET')
+    if page_count > 1:
+        for _ in range(page_count - 1):
+            response, content = api.request(base_url + next_url, method='GET')
 
-        if response.status != 200:
-            break
+            if response.status != 200:
+                break
 
-        try:
-            data = json.loads(content.decode('utf-8'))
-        except json.decoder.JSONDecodeError:
-            break
+            try:
+                data = json.loads(content.decode('utf-8'))
+            except json.decoder.JSONDecodeError:
+                break
 
-        if 'statuses' in data:
-            if len(data['statuses']) > 0:
-                tweets += data['statuses']
+            if 'statuses' in data:
+                if len(data['statuses']) > 0:
+                    tweets += data['statuses']
 
-                if 'search_metadata' in data:
-                    if 'next_results' in data['search_metadata']:
-                        next_url = data['search_metadata']['next_results']
+                    if 'search_metadata' in data:
+                        if 'next_results' in data['search_metadata']:
+                            next_url = data['search_metadata']['next_results']
+                        else:
+                            break
                     else:
                         break
                 else:
                     break
             else:
                 break
-        else:
-            break
 
     if len(tweets) > 0:
         return tweets
