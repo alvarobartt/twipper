@@ -11,7 +11,8 @@ import oauth2
 import requests
 import requests_oauthlib
 
-from twipper.utils import available_languages, country_to_bounding_box
+from twipper.utils import country_to_bounding_box
+# from twipper.utils import available_languages
 from twipper.credentials import Twipper
 
 
@@ -99,10 +100,18 @@ def stream_tweets(access, query, language=None, filter_retweets=False,
     url = 'https://stream.twitter.com/1.1/statuses/filter.json'
 
     if language:
-        try:
-            languages = available_languages(api)
-        except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
-            raise RuntimeError('`available_languages` function failed')
+        # try:
+        #     languages = available_languages(api)
+        # except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
+        #     raise RuntimeError('`twipper.utils.available_languages` function failed')
+
+        languages = [
+            'fr', 'en', 'ar', 'ja', 'es', 'de', 'it', 'id', 'pt', 'ko', 
+            'tr', 'ru', 'nl', 'fil', 'msa', 'zh-tw', 'zh-cn', 'hi', 'no', 
+            'sv', 'fi', 'da', 'pl', 'hu', 'fa', 'he', 'ur', 'th', 'uk', 
+            'ca', 'ga', 'el', 'eu', 'cs', 'gl', 'ro', 'hr', 'en-gb', 'vi', 
+            'bn', 'bg', 'sr', 'sk', 'gu', 'mr', 'ta', 'kn'
+        ]
 
         if language in languages:
             params = {
@@ -314,10 +323,18 @@ def stream_country_tweets(access, country, language=None, filter_retweets=False,
     url = 'https://stream.twitter.com/1.1/statuses/filter.json'
 
     if language:
-        try:
-            languages = available_languages(api)
-        except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
-            raise RuntimeError('`available_languages` function failed')
+        # try:
+        #     languages = available_languages(api)
+        # except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
+        #     raise RuntimeError('`twipper.utils.available_languages` function failed')
+
+        languages = [
+            'fr', 'en', 'ar', 'ja', 'es', 'de', 'it', 'id', 'pt', 'ko', 
+            'tr', 'ru', 'nl', 'fil', 'msa', 'zh-tw', 'zh-cn', 'hi', 'no', 
+            'sv', 'fi', 'da', 'pl', 'hu', 'fa', 'he', 'ur', 'th', 'uk', 
+            'ca', 'ga', 'el', 'eu', 'cs', 'gl', 'ro', 'hr', 'en-gb', 'vi', 
+            'bn', 'bg', 'sr', 'sk', 'gu', 'mr', 'ta', 'kn'
+        ]
 
         if language in languages:
             params = {

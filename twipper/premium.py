@@ -11,7 +11,7 @@ import oauth2
 import requests
 from twipper.credentials import Twipper
 
-from twipper.utils import available_languages
+# from twipper.utils import available_languages
 
 
 def search_tweets(access, query, page_count, from_date, to_date, language=None, filter_retweets=False):
@@ -106,10 +106,18 @@ def search_tweets(access, query, page_count, from_date, to_date, language=None, 
         'Content-Type': 'application/json'
     }
 
-    try:
-        languages = available_languages(api)
-    except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
-        raise RuntimeError('`available_languages` function failed.')
+    # try:
+    #     languages = available_languages(api)
+    # except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
+    #     raise RuntimeError('`twipper.utils.available_languages` function failed')
+
+    languages = [
+        'fr', 'en', 'ar', 'ja', 'es', 'de', 'it', 'id', 'pt', 'ko', 
+        'tr', 'ru', 'nl', 'fil', 'msa', 'zh-tw', 'zh-cn', 'hi', 'no', 
+        'sv', 'fi', 'da', 'pl', 'hu', 'fa', 'he', 'ur', 'th', 'uk', 
+        'ca', 'ga', 'el', 'eu', 'cs', 'gl', 'ro', 'hr', 'en-gb', 'vi', 
+        'bn', 'bg', 'sr', 'sk', 'gu', 'mr', 'ta', 'kn'
+    ]
 
     if language:
         if language in languages:
@@ -284,10 +292,18 @@ def search_user_tweets(access, screen_name, page_count, from_date, to_date, lang
         'Content-Type': 'application/json'
     }
 
-    try:
-        languages = available_languages(api)
-    except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
-        raise RuntimeError('`available_languages` function failed.')
+    # try:
+    #     languages = available_languages(api)
+    # except (ConnectionError, json.decoder.JSONDecodeError, IndexError):
+    #     raise RuntimeError('`twipper.utils.available_languages` function failed')
+
+    languages = [
+        'fr', 'en', 'ar', 'ja', 'es', 'de', 'it', 'id', 'pt', 'ko', 
+        'tr', 'ru', 'nl', 'fil', 'msa', 'zh-tw', 'zh-cn', 'hi', 'no', 
+        'sv', 'fi', 'da', 'pl', 'hu', 'fa', 'he', 'ur', 'th', 'uk', 
+        'ca', 'ga', 'el', 'eu', 'cs', 'gl', 'ro', 'hr', 'en-gb', 'vi', 
+        'bn', 'bg', 'sr', 'sk', 'gu', 'mr', 'ta', 'kn'
+    ]
 
     if language:
         if language in languages:
